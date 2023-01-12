@@ -75,7 +75,7 @@ class CrossSection:
             costh, self.p_f
         )
         ME = ME**2
-        dsigma_tu = (
+        dsigma_tu = 0.5 *(
             (1 / (8 * self.pi) ** 2)
             * abs(self.p_f / self.p_i)
             * (1 / self.Ecm) ** 2
