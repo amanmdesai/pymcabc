@@ -1,0 +1,8 @@
+include LICENSE README.md
+include tests/test*.py
+exclude environment.yml _config.yml
+recursive-exclude .github/
+recursive-include pymcabc/*.py
+include setup.cfg
+include setup.py
+global-exclude *.py[cod] __pycache__ *.so *.dylib
