@@ -35,9 +35,12 @@ class SaveEvent:
         self.boolDecay = boolDecay
         self.boolDetector = boolDetector
 
-    def to_root(self):
+    def to_root(self,name="ABC_events.root"):
         if self.boolDecay==False or self.decay_process == "NaN":
-            file = uproot.recreate("ABC_events.root")
+            if self.boolDetector==True:
+                    self.top1 = Detector().gauss_smear(self.top1)
+                    self.top2 = Detector().gauss_smear(self.top2)
+            file = uproot.recreate(name)
             file["events"] = {
                 self.output_1 + "_Energy": self.top1.E,
                 self.output_1 + "_Px": self.top1.px,
@@ -49,7 +52,7 @@ class SaveEvent:
                 self.output_2 + "_Pz": self.top2.pz,
             }
         else:
-            file = uproot.recreate("ABC_events.root")
+            file = uproot.recreate(name)
             decay1, decay2 = DecayParticle().prepare_decay(self.top1)
             decay3, decay4 = DecayParticle().prepare_decay(self.top2)
             if self.boolDetector:
@@ -57,21 +60,22 @@ class SaveEvent:
                     self.top1 = Detector().gauss_smear(self.top1)
                 if decay2.px[0] == -9 and decay2.E[0] == -9:
                     self.top2 = Detector().gauss_smear(self.top2)
-                decay1 = Detector().gauss_smear(decay1)
-                decay2 = Detector().gauss_smear(decay2)
-                decay3 = Detector().gauss_smear(decay3)
-                decay4 = Detector().gauss_smear(decay4)
+                else:
+                    decay1 = Detector().gauss_smear(decay1)
+                    decay2 = Detector().gauss_smear(decay2)
+                    decay3 = Detector().gauss_smear(decay3)
+                    decay4 = Detector().gauss_smear(decay4)
 
             file["events"] = {
-                self.output_1 + "_Energy": self.top1.E,
+                self.output_1 + "_E": self.top1.E,
                 self.output_1 + "_Px": self.top1.px,
                 self.output_1 + "_Py": self.top1.py,
                 self.output_1 + "_Pz": self.top1.pz,
-                self.output_1 + "_Energy_decay_"+self.decayed1: decay1.E,
+                self.output_1 + "_E_decay_"+self.decayed1: decay1.E,
                 self.output_1 + "_Px_decay_"+self.decayed1: decay1.px,
                 self.output_1 + "_Py_decay_"+self.decayed1: decay1.py,
                 self.output_1 + "_Pz_decay_"+self.decayed1: decay1.pz,
-                self.output_1 + "_Energy_decay_"+self.decayed1: decay2.E,
+                self.output_1 + "_E_decay_"+self.decayed1: decay2.E,
                 self.output_1 + "_Px_decay_"+self.decayed1: decay2.px,
                 self.output_1 + "_Py_decay_"+self.decayed1: decay2.py,
                 self.output_1 + "_Pz_decay_"+self.decayed1: decay2.pz,
@@ -79,16 +83,17 @@ class SaveEvent:
                 self.output_2 + "_Px": self.top2.px,
                 self.output_2 + "_Py": self.top2.py,
                 self.output_2 + "_Pz": self.top2.pz,
-                self.output_2 + "_Energy_decay_"+self.decayed2: decay3.E,
+                self.output_2 + "_E_decay_"+self.decayed2: decay3.E,
                 self.output_2 + "_Px_decay_"+self.decayed2: decay3.px,
                 self.output_2 + "_Py_decay_"+self.decayed2: decay3.py,
                 self.output_2 + "_Pz_decay_"+self.decayed2: decay3.pz,
-                self.output_2 + "_Energy_decay_"+self.decayed2: decay4.E,
+                self.output_2 + "_E_decay_"+self.decayed2: decay4.E,
                 self.output_2 + "_Px_decay_"+self.decayed2: decay4.px,
                 self.output_2 + "_Py_decay_"+self.decayed2: decay4.py,
                 self.output_2 + "_Pz_decay_"+self.decayed2: decay4.pz,
             }
 
+"""drop support for csv file
     def to_csv(self):
 
         data = list(
@@ -117,3 +122,4 @@ class SaveEvent:
         df = pd.DataFrame(data, columns=column_name)
         df.reset_index(drop=True, inplace=True)
         df.to_csv("ABC_events.csv", index=False)
+"""

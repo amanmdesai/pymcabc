@@ -10,8 +10,7 @@ class PlotData:
         plt.hist(data, bins=40, color=None)
         label = key.replace("_", " ")
         plt.xlabel(label)
-        plt.ylabel("Counts")
-        # plt.ylim(data.min()*.5,data.max()*2)
+        plt.ylabel("Events")
         plt.show()
         plt.savefig(key + ".png")
 
