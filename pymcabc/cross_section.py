@@ -21,28 +21,24 @@ class MatrixElement:
 
     def s_channel(self):
         """definition for s channel"""
-        # if abs(self.Ecm**2 - self.mx**2) <= 0.001:
-        #    return (self.g**2) / (self.Ecm**2 - self.mx**2 + 0.0010)
-        # else:
         return (self.g**2) / (self.Ecm**2 - self.mx**2)
 
     def t_channel(self, costh, pf):
         """definition for t channel"""
-        deno = self.m1**2 + self.m3**2 - self.mx**2 + 2*self.Ecm*math.sqrt(pf**2 + self.m3**2) + 2 * self.p_i * pf * costh
+        deno = self.m1**2 + self.m3**2 - self.mx**2 - 4*self.Ecm*math.sqrt(pf**2 + self.m3**2) + (2 * self.p_i * pf * costh)
         if abs(deno) <= 0.0099:
-            # print('here ', deno,' ', costh)
-            return (self.g**2) / (deno + 1000)
+            return (self.g**2)/(deno +.0100 )
         else:
-            return (self.g**2) / deno
+            return (self.g**2)/deno
 
     def u_channel(self, costh, pf):
         """definition for u channel"""
-        deno = self.m1**2 + self.m4**2 - self.mx**2 + 2*self.Ecm*math.sqrt(pf**2 + self.m4**2) - 2 * self.p_i * pf * costh
+        deno = self.m1**2 + self.m4**2 - self.mx**2 - (4*self.Ecm*math.sqrt(pf**2 + self.m4**2)) - (2 * self.p_i * pf * costh)
         if abs(deno) <= 0.0099:
-            # print('here ', deno,' ', costh)
-            return (self.g**2) / (deno + 1000)
+            return (self.g**2) / (deno +0.0100 )
         else:
             return (self.g**2) / deno
+
 
 class CrossSection:
     def __init__(self):
@@ -60,24 +56,14 @@ class CrossSection:
 
     def dsigma_st(self, costh):
         ME = MatrixElement().s_channel() + MatrixElement().t_channel(costh, self.p_f)
-        ME = ME**2
-        dsigma_st = (
-            (1 / (8 * self.pi) ** 2)
-            * abs(self.p_f / self.p_i)
-            * (1 / self.Ecm) ** 2
-            * ME
-        )
+        dsigma_st = 1 / ((8 * self.Ecm * self.pi)**2)
+        dsigma_st =dsigma_st* abs(self.p_f / self.p_i)* ME**2
         return dsigma_st
 
     def dsigma_tu(self, costh):
-        ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(
-            costh, self.p_f)
-        ME = ME**2
-        dsigma_tu = 0.5 *(
-            (1 / (8 * self.pi) ** 2)
-            * abs(self.p_f / self.p_i)
-            * (1 / self.Ecm) ** 2
-            * ME)
+        ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(costh, self.p_f)
+        dsigma_tu = 0.5 / ((self.Ecm * 8 * self.pi)**2)
+        dsigma_tu =dsigma_tu* abs(self.p_f / self.p_i) * ME**2
         return dsigma_tu
 
     def xsection(self, w_max):
