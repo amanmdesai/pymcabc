@@ -29,9 +29,9 @@ class SaveEvent:
             self.decayed1 = decay_split[1]
             self.decayed2 = decay_split[2]
         self.p1_e,self.p1_px,self.p1_py,self.p1_pz,self.p2_e,self.p2_px,self.p2_py,self.p2_pz= GENEvents(self.Nevent).gen_events()
-        #print(self.p1_e.type)
         self.top1 = Particle(self.p1_e, self.p1_px, self.p1_py, self.p1_pz)
         self.top2 = Particle(self.p2_e, self.p2_px, self.p2_py, self.p2_pz)
+        print(self.top1.mass())
         self.boolDecay = boolDecay
         self.boolDetector = boolDetector
 
@@ -40,6 +40,8 @@ class SaveEvent:
             if self.boolDetector==True:
                     self.top1 = Detector().gauss_smear(self.top1)
                     self.top2 = Detector().gauss_smear(self.top2)
+                    print(self.top1.mass())
+
             file = uproot.recreate(name)
             file["events"] = {
                 self.output_1 + "_Energy": self.top1.E,
@@ -53,18 +55,23 @@ class SaveEvent:
             }
         else:
             file = uproot.recreate(name)
-            decay1, decay2 = DecayParticle().prepare_decay(self.top1)
-            decay3, decay4 = DecayParticle().prepare_decay(self.top2)
-            if self.boolDetector:
-                if decay1.px[0] == -9 and decay1.E[0] == -9:
-                    self.top1 = Detector().gauss_smear(self.top1)
-                if decay2.px[0] == -9 and decay2.E[0] == -9:
-                    self.top2 = Detector().gauss_smear(self.top2)
-                else:
-                    decay1 = Detector().gauss_smear(decay1)
-                    decay2 = Detector().gauss_smear(decay2)
-                    decay3 = Detector().gauss_smear(decay3)
-                    decay4 = Detector().gauss_smear(decay4)
+            print('here')
+            print(self.top1.mass())
+            top1 = self.top1
+            top2 = self.top2
+            decay1, decay2 = DecayParticle().prepare_decay(top1)
+            decay3, decay4 = DecayParticle().prepare_decay(top2)
+
+            if self.boolDetector==True:
+                #if decay1.px[0] == -9 and decay1.E[0] == -9:
+                self.top1 = Detector().gauss_smear(self.top1)
+                #if decay2.px[0] == -9 and decay2.E[0] == -9:
+                self.top2 = Detector().gauss_smear(self.top2)
+                #else:
+                decay1 = Detector().gauss_smear(decay1)
+                decay2 = Detector().gauss_smear(decay2)
+                decay3 = Detector().gauss_smear(decay3)
+                decay4 = Detector().gauss_smear(decay4)
 
             file["events"] = {
                 self.output_1 + "_E": self.top1.E,

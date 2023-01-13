@@ -10,7 +10,7 @@ class Detector:
         else:
             print("Type Not found")
         return particle
-    def gauss_smear(self, particle: Particle, mean: float = 1, sigma: float = 0.5):
+    def gauss_smear(self, particle: Particle, sigma: float = 0.5):
         size=particle.E.shape[0]
         if particle.px[0] ==-9 and particle.py[0] == -9:
             return particle

@@ -3,14 +3,11 @@ import numpy as np
 
 class Particle:
     def __init__(self, E, px, py, pz):
-        # self.id = id
+
         self.E = E
         self.px = px
         self.py = py
         self.pz = pz
-
-    # def id(self):
-    #    return self.id
 
     def E(self):
         return self.E
@@ -55,16 +52,17 @@ class Particle:
 
     def boost(self, other):  # boost motivated from ROOT TLorentzVector class
         new = Particle(-9,-9,-9,-9)
-        other.set4momenta(other.E, other.px/other.E,other.py/other.E,other.pz/other.E)
-        beta = other.p()
+        new_other = Particle(-9,-9,-9,-9)
+        new_other.set4momenta(other.E, other.px/other.E,other.py/other.E,other.pz/other.E)
+        beta = new_other.p()
         gamma = 1.0 /np.sqrt(1 - beta**2)
         gamma_2 = (gamma - 1.0) / beta
 
         dotproduct = (
-            self.px * other.px + self.py * other.py + self.pz * other.pz
+            self.px * new_other.px + self.py * new_other.py + self.pz * new_other.pz
         )
-        new.px =  self.px + (gamma_2 * dotproduct + gamma * self.E)*other.px
-        new.py =  self.py + (gamma_2 * dotproduct + gamma * self.E)*other.py
-        new.pz =  self.pz + (gamma_2 * dotproduct + gamma * self.E)*other.pz
+        new.px =  self.px + (gamma_2 * dotproduct + gamma * self.E)*new_other.px
+        new.py =  self.py + (gamma_2 * dotproduct + gamma * self.E)*new_other.py
+        new.pz =  self.pz + (gamma_2 * dotproduct + gamma * self.E)*new_other.pz
         new.E = gamma * (self.E + dotproduct)
         return new

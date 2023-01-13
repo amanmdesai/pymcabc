@@ -38,6 +38,7 @@ class DecayParticle:
 
 
     def decay(self, top: Particle):
+
         self.decay_p = 1 / (2 * top.mass()) * np.sqrt(
             (self.mA**4+ self.mB**4+ self.mC**4)
             - 2 * (self.mA**2 * self.mB**2 +  self.mA**2 * self.mC**2 + self.mB**2 * self.mC**2)
