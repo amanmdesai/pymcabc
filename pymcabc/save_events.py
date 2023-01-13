@@ -31,7 +31,7 @@ class SaveEvent:
         self.p1_e,self.p1_px,self.p1_py,self.p1_pz,self.p2_e,self.p2_px,self.p2_py,self.p2_pz= GENEvents(self.Nevent).gen_events()
         self.top1 = Particle(self.p1_e, self.p1_px, self.p1_py, self.p1_pz)
         self.top2 = Particle(self.p2_e, self.p2_px, self.p2_py, self.p2_pz)
-        print(self.top1.mass())
+
         self.boolDecay = boolDecay
         self.boolDetector = boolDetector
 
@@ -55,8 +55,6 @@ class SaveEvent:
             }
         else:
             file = uproot.recreate(name)
-            print('here')
-            print(self.top1.mass())
             top1 = self.top1
             top2 = self.top2
             decay1, decay2 = DecayParticle().prepare_decay(top1)
