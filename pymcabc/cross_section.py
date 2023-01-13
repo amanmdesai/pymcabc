@@ -32,9 +32,7 @@ class MatrixElement:
             - (self.Ecm * math.sqrt(pf**2 + self.m3**2))
             + (2 * self.p_i * pf * costh)
         )
-        #print(self.p_i, " ", pf)
-        # print("t ", costh, " ", deno)
-        if abs(deno) <= 0.1:
+        if abs(deno) <= 0.09:
             return (self.g**2) / (deno + 100)
         else:
             return (self.g**2) / deno
@@ -48,28 +46,10 @@ class MatrixElement:
             - (self.Ecm * math.sqrt(pf**2 + self.m4**2))
             - (2 * self.p_i * pf * costh)
         )
-        if abs(deno) <= 0.1:
+        if abs(deno) <= 0.09:
             return (self.g**2) / (deno + 100)
         else:
             return (self.g**2) / deno
-
-    def write(self, costh, pf):
-        deno1 = (
-            self.m1**2
-            + self.m4**2
-            - self.mx**2
-            - (4 * self.Ecm * math.sqrt(pf**2 + self.m4**2))
-            - (2 * self.p_i * pf * costh)
-        )
-        deno2 = (
-            self.m1**2
-            + self.m3**2
-            - self.mx**2
-            - (4 * self.Ecm * math.sqrt(pf**2 + self.m3**2))
-            + (2 * self.p_i * pf * costh)
-        )
-        deno = 1 / deno1 + 1 / deno2
-        return deno
 
 
 class CrossSection:
@@ -93,12 +73,7 @@ class CrossSection:
         return dsigma_st
 
     def dsigma_tu(self, costh):
-        ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(
-            costh, self.p_f
-        )
-        # print('ME ',costh,' ',ME)
-        # ME = MatrixElement().write(costh, self.p_f)
-        # print(ME)
+        ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(costh, self.p_f)
         dsigma_tu = 0.5 / ((self.Ecm * 8 * self.pi) ** 2)
         dsigma_tu = dsigma_tu * abs(self.p_f / self.p_i) * ME**2
         return dsigma_tu
