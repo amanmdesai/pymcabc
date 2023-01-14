@@ -40,7 +40,6 @@ class SaveEvent:
             if self.boolDetector==True:
                     self.top1 = Detector().gauss_smear(self.top1)
                     self.top2 = Detector().gauss_smear(self.top2)
-                    print(self.top1.mass())
 
             file = uproot.recreate(name)
             file["events"] = {
