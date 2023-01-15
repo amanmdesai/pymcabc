@@ -11,7 +11,7 @@ from pymcabc.detector import Detector
 
 
 class SaveEvent:
-    def __init__(self, Nevent, boolDecay: bool=True, boolDetector: bool=True):
+    def __init__(self, Nevent, boolDecay: bool=True, boolDetector: bool=True,boolTruth: bool=True):
         self.Nevent = Nevent
         with open("library.json", "r") as f:
             library = json.load(f)
@@ -34,8 +34,25 @@ class SaveEvent:
 
         self.boolDecay = boolDecay
         self.boolDetector = boolDetector
+        self.boolTruth = boolTruth
 
     def to_root(self,name="ABC_events.root"):
+
+        if self.boolTruth==True :
+            file = uproot.recreate("truth_"+name)
+            file["events"] = {
+                self.output_1 + "_E": self.top1.E,
+                self.output_1 + "_Px": self.top1.px,
+                self.output_1 + "_Py": self.top1.py,
+                self.output_1 + "_Pz": self.top1.pz,
+                self.output_2 + "_E": self.top2.E,
+                self.output_2 + "_Px": self.top2.px,
+                self.output_2 + "_Py": self.top2.py,
+                self.output_2 + "_Pz": self.top2.pz,
+            }
+
+
+
         if self.boolDecay==False or self.decay_process == "NaN":
             if self.boolDetector==True:
                     self.top1 = Detector().gauss_smear(self.top1)
@@ -43,7 +60,7 @@ class SaveEvent:
 
             file = uproot.recreate(name)
             file["events"] = {
-                self.output_1 + "_Energy": self.top1.E,
+                self.output_1 + "_E": self.top1.E,
                 self.output_1 + "_Px": self.top1.px,
                 self.output_1 + "_Py": self.top1.py,
                 self.output_1 + "_Pz": self.top1.pz,
