@@ -21,26 +21,33 @@ class MatrixElement:
 
     def s_channel(self):
         """definition for s channel"""
-        # if abs(self.Ecm**2 - self.mx**2) <= 0.001:
-        #    return (self.g**2) / (self.Ecm**2 - self.mx**2 + 0.0010)
-        # else:
         return (self.g**2) / (self.Ecm**2 - self.mx**2)
 
     def t_channel(self, costh, pf):
         """definition for t channel"""
-        deno = self.m1**2 + self.m3**2 - self.mx**2 - 2 * self.p_i * pf * costh
-        if abs(deno) <= 0.099:
-            # print('here ', deno,' ', costh)
-            return (self.g**2) / (deno + 1000)
+        deno = (
+            self.m1**2
+            + self.m3**2
+            - self.mx**2
+            - (self.Ecm * math.sqrt(pf**2 + self.m3**2))
+            + (2 * self.p_i * pf * costh)
+        )
+        if abs(deno) <= 0.09:
+            return (self.g**2) / (deno + 100)
         else:
             return (self.g**2) / deno
 
     def u_channel(self, costh, pf):
         """definition for u channel"""
-        deno = self.m1**2 + self.m4**2 - self.mx**2 - 2 * self.p_i * pf * costh
-        if abs(deno) <= 0.099:
-            # print('here ', deno,' ', costh)
-            return (self.g**2) / (deno + 1000)
+        deno = (
+            self.m1**2
+            + self.m4**2
+            - self.mx**2
+            - (self.Ecm * math.sqrt(pf**2 + self.m4**2))
+            - (2 * self.p_i * pf * costh)
+        )
+        if abs(deno) <= 0.09:
+            return (self.g**2) / (deno + 100)
         else:
             return (self.g**2) / deno
 
@@ -61,26 +68,14 @@ class CrossSection:
 
     def dsigma_st(self, costh):
         ME = MatrixElement().s_channel() + MatrixElement().t_channel(costh, self.p_f)
-        ME = ME**2
-        dsigma_st = (
-            (1 / (8 * self.pi) ** 2)
-            * abs(self.p_f / self.p_i)
-            * (1 / self.Ecm) ** 2
-            * ME
-        )
+        dsigma_st = 1 / ((8 * self.Ecm * self.pi) ** 2)
+        dsigma_st = dsigma_st * abs(self.p_f / self.p_i) * ME**2
         return dsigma_st
 
     def dsigma_tu(self, costh):
-        ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(
-            costh, self.p_f
-        )
-        ME = ME**2
-        dsigma_tu = 0.5 *(
-            (1 / (8 * self.pi) ** 2)
-            * abs(self.p_f / self.p_i)
-            * (1 / self.Ecm) ** 2
-            * ME
-        )
+        ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(costh, self.p_f)
+        dsigma_tu = 0.5 / ((self.Ecm * 8 * self.pi) ** 2)
+        dsigma_tu = dsigma_tu * abs(self.p_f / self.p_i) * ME**2
         return dsigma_tu
 
     def xsection(self, w_max):
@@ -93,7 +88,7 @@ class CrossSection:
             w_max = w_i
         return w_i, w_max
 
-    def integrate_xsec(self, N=80000):
+    def integrate_xsec(self, N=20000):
         w_sum = 0
         w_max = 0
         w_square = 0
@@ -110,7 +105,7 @@ class CrossSection:
             json.dump(library, f)
         return None
 
-    def calc_xsection(self, N=80000):
+    def calc_xsection(self, N=20000):
         self.integrate_xsec(N)
         with open("library.json", "r") as f:
             library = json.load(f)
@@ -119,13 +114,7 @@ class CrossSection:
         w_max = library["w_max"][0]
         sigma_x = w_sum * pymcabc.constants.convert / (N * 1e12)
         variance = math.sqrt(w_square / N - (w_sum / N) ** 2)  # barn unit
-        error = variance * pymcabc.constants.convert / (math.sqrt(N) * 1e12)  # barn unit
+        error = (
+            variance * pymcabc.constants.convert / (math.sqrt(N) * 1e12)
+        )  # barn unit
         return sigma_x, error
-
-
-"""return (self.g**2) / (
-    self.m1**2
-    + self.m4**3
-    - self.mx**2
-    - 2 * (self.p_i**2) * (pf**2) * costh
-)"""
