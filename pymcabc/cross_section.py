@@ -65,15 +65,26 @@ class CrossSection:
         self.process = library["process_type"][0]
         self.p_f = pymcabc.constants.outgoing_p(self.Ecm, self.m3, self.m4)
         self.p_i = math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
+        self.channel =  library["channel"][0]
 
     def dsigma_st(self, costh):
-        ME = MatrixElement().s_channel() + MatrixElement().t_channel(costh, self.p_f)
+        if self.channel == 's':
+            ME = MatrixElement().s_channel()
+        elif self.channel == 't':
+            ME = MatrixElement().t_channel(costh, self.p_f)
+        else:
+            ME = MatrixElement().s_channel() + MatrixElement().t_channel(costh, self.p_f)
         dsigma_st = 1 / ((8 * self.Ecm * self.pi) ** 2)
         dsigma_st = dsigma_st * abs(self.p_f / self.p_i) * ME**2
         return dsigma_st
 
     def dsigma_tu(self, costh):
-        ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(costh, self.p_f)
+        if self.channel == 't':
+            ME = MatrixElement().t_channel(costh, self.p_f)
+        elif self.channel == 'u':
+            ME = MatrixElement().u_channel(costh, self.p_f)
+        else:
+            ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(costh, self.p_f)
         dsigma_tu = 0.5 / ((self.Ecm * 8 * self.pi) ** 2)
         dsigma_tu = dsigma_tu * abs(self.p_f / self.p_i) * ME**2
         return dsigma_tu
@@ -112,6 +123,7 @@ class CrossSection:
         w_sum = library["w_sum"][0]
         w_square = library["w_square"][0]
         w_max = library["w_max"][0]
+        print(w_square, ' ', w_sum)
         sigma_x = w_sum * pymcabc.constants.convert / (N * 1e12)
         variance = math.sqrt(w_square / N - (w_sum / N) ** 2)  # barn unit
         error = (
