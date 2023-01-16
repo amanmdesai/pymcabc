@@ -99,7 +99,7 @@ class CrossSection:
             w_max = w_i
         return w_i, w_max
 
-    def integrate_xsec(self, N=20000):
+    def integrate_xsec(self, N=40000):
         w_sum = 0
         w_max = 0
         w_square = 0
@@ -116,7 +116,7 @@ class CrossSection:
             json.dump(library, f)
         return None
 
-    def calc_xsection(self, N=20000):
+    def calc_xsection(self, N=40000):
         self.integrate_xsec(N)
         with open("library.json", "r") as f:
             library = json.load(f)
