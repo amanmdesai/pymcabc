@@ -123,7 +123,6 @@ class CrossSection:
         w_sum = library["w_sum"][0]
         w_square = library["w_square"][0]
         w_max = library["w_max"][0]
-        print(w_square, ' ', w_sum)
         sigma_x = w_sum * pymcabc.constants.convert / (N * 1e12)
         variance = math.sqrt(w_square / N - (w_sum / N) ** 2)  # barn unit
         error = (
