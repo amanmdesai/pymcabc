@@ -20,6 +20,7 @@ def build_json():
         "Ecm": [],
         "process": [],
         "process_type": [],
+        "channel": [],
         "w_max": [],
         "w_sum": [],
         "w_square": [],
@@ -31,7 +32,7 @@ def build_json():
 
 
 class DefineProcess:
-    def __init__(self, input_string, mA, mB, mC, Ecm):
+    def __init__(self, input_string: str, mA: float, mB: float, mC: float, Ecm: float, channel: str= 'none'):
         build_json()
         with open("library.json", "r") as f:
             self.library = json.load(f)
@@ -43,6 +44,7 @@ class DefineProcess:
         self.library["mA"].append(mA)
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)
+        self.library["channel"].append(channel)
         self.process()
         self.masses()
         self.ECM()
