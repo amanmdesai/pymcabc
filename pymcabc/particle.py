@@ -2,36 +2,63 @@ import math
 import numpy as np
 
 class Particle:
-    def __init__(self, E, px, py, pz):
+    """
+    This class assigns four momentum to a particle
 
+    Parameters:
+        E (float): Energy of the particle
+        px (float): x momentum of the particle
+        py (float): y momentum of the particle
+        pz (float): z momentum of the particle
+
+    """
+    def __init__(self, E: float, px: float, py: float, pz: float):
+        """
+        Assigns four momentum to a particle
+
+        Parameters:
+            E (float): Energy of the particle
+            px (float): x momentum of the particle
+            py (float): y momentum of the particle
+            pz (float): z momentum of the particle
+
+        """
         self.E = E
         self.px = px
         self.py = py
         self.pz = pz
 
     def E(self):
+        """returns particle's energy"""
         return self.E
 
     def px(self):
+        """returns x component of particle's momentum"""
         return self.px
 
     def py(self):
+        """returns y component of particle's momentum"""
         return self.py
 
     def pz(self):
+        """returns z component of particle's momentum"""
         return self.pz
 
     def p(self):
+        """returns particle's absolute momentum"""
         return np.sqrt(self.px**2 + self.py**2 + self.pz**2)
 
     def p2(self):
+        """returns square of particle's absolute momentum"""
         return self.px**2 + self.py**2 + self.pz**2
 
     def pT(self):
+        """returns particle's transverse momentum"""
         return np.sqrt(self.px**2 + self.py**2)
 
 
     def mass(self):
+        """returns particle's mass"""
         # try:
         #    x = math.sqrt(self.E**2 - sum([self.px**2, self.py**2, self.pz**2]))
         #    return x
@@ -45,12 +72,17 @@ class Particle:
         return x
 
     def set4momenta(self, new_E, new_px, new_py, new_pz):
+        """assign new four momentum to an existing particle"""
         self.px = new_px
         self.py = new_py
         self.pz = new_pz
         self.E = new_E
 
-    def boost(self, other):  # boost motivated from ROOT TLorentzVector class
+    def boost(self, other):
+        """
+        boosts a particle four momentum.
+         # boost motivated from ROOT TLorentzVector class
+        """
         new = Particle(-9,-9,-9,-9)
         new_other = Particle(-9,-9,-9,-9)
         new_other.set4momenta(other.E, other.px/other.E,other.py/other.E,other.pz/other.E)

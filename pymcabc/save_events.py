@@ -11,7 +11,23 @@ from pymcabc.detector import Detector
 
 
 class SaveEvent:
-    def __init__(self, Nevent, boolDecay: bool=True, boolDetector: bool=True,boolTruth: bool=True):
+    """
+    class of saving events
+    Parameters:
+        Nevent (int): number of events to generate
+        boolDecay (bool): optional.  decay particles or not
+        boolDetector (bool): optional.  gaussian smearing on particles
+        boolTruth (bool): optional.  save truth events
+    """
+    def __init__(self, Nevent: int, boolDecay: bool=True, boolDetector: bool=True,boolTruth: bool=True):
+        """
+         saving events
+        Parameters:
+            Nevent (int): number of events to generate
+            boolDecay (bool): optional.  decay particles or not
+            boolDetector (bool): optional.  gaussian smearing on particles
+            boolTruth (bool): optional.  save truth events
+        """
         self.Nevent = Nevent
         with open("library.json", "r") as f:
             library = json.load(f)
@@ -36,8 +52,12 @@ class SaveEvent:
         self.boolDetector = boolDetector
         self.boolTruth = boolTruth
 
-    def to_root(self,name="ABC_events.root"):
+    def to_root(self,name: str="ABC_events.root"):
+        """ function to save event as ROOT file
+        Parameters:
+            name (str): name of root file
 
+        """
         if self.boolTruth==True :
             file = uproot.recreate("truth_"+name)
             file["events"] = {

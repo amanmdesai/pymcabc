@@ -32,7 +32,33 @@ def build_json():
 
 
 class DefineProcess:
+    """
+    This is class to define the process, masses of particles and center of mass energy
+    Parameters:
+        input_string (str): Physics process. Example > 'A A > B B'
+        mA (float): mass of particle A
+        mB (float): mass of particle B
+        mC (float): mass of particle C
+        Ecm (float): center of mass energy
+        channel (str): optional, use to study effect a particular channel
+
+
+    """
+
     def __init__(self, input_string: str, mA: float, mB: float, mC: float, Ecm: float, channel: str= 'none'):
+        """
+        Defines the process, masses of particles and center of mass energy
+        Parameters:
+            input_string (str): Physics process. Example > 'A A > B B'
+            mA (float): mass of particle A
+            mB (float): mass of particle B
+            mC (float): mass of particle C
+            Ecm (float): center of mass energy
+            channel (str): optional, use to study effect a particular channel
+
+
+        """
+
         build_json()
         with open("library.json", "r") as f:
             self.library = json.load(f)
@@ -52,6 +78,7 @@ class DefineProcess:
         self.identify_decay()
 
     def process(self):
+        """identify the physics process"""
         self.library["process"].append(self.input_string)
         string = self.input_string.replace(" > ", " ")
         string = string.split(" ")
@@ -71,6 +98,7 @@ class DefineProcess:
         return None
 
     def masses(self):
+        """assign masses to m1, m2, m3, m4 and mediator"""
         string = self.input_string.replace(" > ", " ")
         string = string.split(" ")
         pmass = [0, 0, 0, 0]
@@ -92,12 +120,14 @@ class DefineProcess:
         return None
 
     def ECM(self):
+        """ center of mass energy """
         self.library["Ecm"].append(self.Ecm)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
         return None
 
     def identify_mediator(self):
+        """ identify the mediator of the process"""
         process = self.library["process"][0]
         process = process.replace(" > ", " ")
         if (
@@ -131,7 +161,7 @@ class DefineProcess:
         return None
 
     def identify_decay(self):
-
+        """identify the decay chain associated with the process"""
         mA = self.library["mA"][0]
         mB = self.library["mB"][0]
         mC = self.library["mC"][0]

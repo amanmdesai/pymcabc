@@ -7,6 +7,9 @@ from pymcabc.particle import Particle
 
 
 class DecayParticle:
+    """
+    decays particle
+    """
     def __init__(self):
         # self.Ecm = library["Ecm"][0]
         with open("library.json", "r") as f:
@@ -21,7 +24,8 @@ class DecayParticle:
         self.delta = pymcabc.constants.delta
 
     def rotate(self,pdecay: Particle,size: int):
-
+        """rotate particle
+        """
         costh =  (np.random.rand(size) * 2) -1
         sinth = np.sqrt(1 - costh**2)
         phi = 2 * math.pi * np.random.rand(size)
@@ -38,7 +42,7 @@ class DecayParticle:
 
 
     def decay(self, top: Particle):
-
+        """decay particle"""
         self.decay_p = 1 / (2 * top.mass()) * np.sqrt(
             (self.mA**4+ self.mB**4+ self.mC**4)
             - 2 * (self.mA**2 * self.mB**2 +  self.mA**2 * self.mC**2 + self.mB**2 * self.mC**2)

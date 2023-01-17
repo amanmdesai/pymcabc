@@ -6,6 +6,9 @@ import uproot
 
 
 class PlotData:
+    """
+    class for plotting data
+    """
     def plot(data, key):
         plt.hist(data, bins=40, color=None)
         label = key.replace("_", " ")

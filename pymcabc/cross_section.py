@@ -5,6 +5,8 @@ import json
 
 
 class MatrixElement:
+    """ internal class for matrix element calculation
+    """
     def __init__(self):
         with open("library.json", "r") as f:
             library = json.load(f)
@@ -53,6 +55,9 @@ class MatrixElement:
 
 
 class CrossSection:
+    """
+    class for cross section calculation
+    """
     def __init__(self):
         self.pi = pymcabc.constants.pi
         self.delta = pymcabc.constants.delta
@@ -116,7 +121,7 @@ class CrossSection:
             json.dump(library, f)
         return None
 
-    def calc_xsection(self, N=40000):
+    def calc_xsection(self, N: int=40000):
         self.integrate_xsec(N)
         with open("library.json", "r") as f:
             library = json.load(f)

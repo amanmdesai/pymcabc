@@ -7,7 +7,10 @@ from pymcabc.cross_section import CrossSection
 
 
 class GENEvents:
-    def __init__(self, Nevent):
+    """
+    internal class for generating events
+    """
+    def __init__(self, Nevent: int):
         self.delta = pymcabc.constants.delta
         self.Nevent = Nevent
         with open("library.json", "r") as f:
