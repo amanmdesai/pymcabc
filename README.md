@@ -40,7 +40,7 @@ pymcabc.SaveEvent(10000,boolDecay=True,boolDetector=True).to_root('name.root')
 
 4. Analyze the root file. Basic analysis is possible by calling the `PlotData` module
 ```python
-PlotData.file('name.root')
+pymcabc.PlotData.file('name.root')
 ```
 
 ## References
