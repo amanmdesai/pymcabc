@@ -31,5 +31,5 @@ jobs:
           pytest -v tests/*.py
       - name: coverage
         run: |
-          coverage run --source=package_name -m pytest -v tests/
+          coverage run --source=pymcabc -m pytest -v tests/
           coverage report
