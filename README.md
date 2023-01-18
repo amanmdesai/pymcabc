@@ -8,6 +8,7 @@
 
 Aman Desai
 
+
 ##  Description
 
 Monte Carlo Event Generator for the ABC theory
@@ -18,21 +19,21 @@ pip install pymcabc
 ```
 
 ## Physics
-The physics of ABC model (theory) is described in Grifiths. 
+The physics of ABC model (theory) is described in Grifiths.
 
 ## Simple script to start using the package:
 
-- 1. Define the process, for example: 
+- 1. Define the process, for example:
 ```python
 pymcabc.DefineProcess(`A A > B B',mA=4,mB=10,mC=1,Ecm=30)
 ```
 
-2. Calculate the total cross section of the process: 
+2. Calculate the total cross section of the process:
 ```python
 pymcabc.CrossSection().calc_xsection()
 ```
 
-3. Generate and Save events using a single command. Select whether to allow final state particle decays or not. Also select whether to apply detector effects on particle. 
+3. Generate and Save events using a single command. Select whether to allow final state particle decays or not. Also select whether to apply detector effects on particle.
 pymcabc.SaveEvent(10000,boolDecay=True,boolDetector=True).to_root('name.root')
 
 
