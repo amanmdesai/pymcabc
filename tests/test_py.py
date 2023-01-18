@@ -6,7 +6,8 @@ def test_eventGen():
     pymcabc.DefineProcess('A A > B B',mA=4,mB=10,mC=1,Ecm=30)
     pymcabc.CrossSection().calc_xsection()
     pymcabc.PlotData.file('name.root')
-    assert 'name.root' in os.listdir():
+    assert 'name.root' in os.listdir(), \
+        "file not created"
 
 def test_xsec():
     pymcabc.DefineProcess('A A > B B',mA=4,mB=10,mC=1,Ecm=30)
