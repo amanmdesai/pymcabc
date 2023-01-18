@@ -4,6 +4,9 @@
 [![publish](https://github.com/amanmdesai/pymcabc/actions/workflows/publish.yaml/badge.svg)](https://github.com/amanmdesai/pymcabc/actions/workflows/publish.yaml)
 [![test](https://github.com/amanmdesai/pymcabc/actions/workflows/test.yaml/badge.svg)](https://github.com/amanmdesai/pymcabc/actions/workflows/test.yaml)
 [![DOI](https://zenodo.org/badge/587987289.svg)](https://zenodo.org/badge/latestdoi/587987289)
+[![PyPI Package latest release](https://img.shields.io/pypi/v/pymcabc.svg)](https://pypi.python.org/pypi/pymcabc)
+[![Supported versions](https://img.shields.io/pypi/pyversions/pymcabc.svg)](https://pypi.python.org/pypi/pymcabc)
+
 
 ## Author
 
