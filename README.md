@@ -27,9 +27,9 @@ The physics of ABC model (theory) is described in Grifiths.
 
 ## Simple script to start using the package:
 
-- 1. Define the process, for example:
+1. Define the process, for example:
 ```python
-pymcabc.DefineProcess(`A A > B B',mA=4,mB=10,mC=1,Ecm=30)
+pymcabc.DefineProcess('A A > B B',mA=4,mB=10,mC=1,Ecm=30)
 ```
 
 2. Calculate the total cross section of the process:
