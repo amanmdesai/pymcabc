@@ -5,8 +5,8 @@ import json
 
 
 class MatrixElement:
-    """ internal class for matrix element calculation
-    """
+    """internal class for matrix element calculation"""
+
     def __init__(self):
         with open("library.json", "r") as f:
             library = json.load(f)
@@ -58,6 +58,7 @@ class CrossSection:
     """
     class for cross section calculation
     """
+
     def __init__(self):
         self.pi = pymcabc.constants.pi
         self.delta = pymcabc.constants.delta
@@ -70,26 +71,30 @@ class CrossSection:
         self.process = library["process_type"][0]
         self.p_f = pymcabc.constants.outgoing_p(self.Ecm, self.m3, self.m4)
         self.p_i = math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
-        self.channel =  library["channel"][0]
+        self.channel = library["channel"][0]
 
     def dsigma_st(self, costh):
-        if self.channel == 's':
+        if self.channel == "s":
             ME = MatrixElement().s_channel()
-        elif self.channel == 't':
+        elif self.channel == "t":
             ME = MatrixElement().t_channel(costh, self.p_f)
         else:
-            ME = MatrixElement().s_channel() + MatrixElement().t_channel(costh, self.p_f)
+            ME = MatrixElement().s_channel() + MatrixElement().t_channel(
+                costh, self.p_f
+            )
         dsigma_st = 1 / ((8 * self.Ecm * self.pi) ** 2)
         dsigma_st = dsigma_st * abs(self.p_f / self.p_i) * ME**2
         return dsigma_st
 
     def dsigma_tu(self, costh):
-        if self.channel == 't':
+        if self.channel == "t":
             ME = MatrixElement().t_channel(costh, self.p_f)
-        elif self.channel == 'u':
+        elif self.channel == "u":
             ME = MatrixElement().u_channel(costh, self.p_f)
         else:
-            ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(costh, self.p_f)
+            ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(
+                costh, self.p_f
+            )
         dsigma_tu = 0.5 / ((self.Ecm * 8 * self.pi) ** 2)
         dsigma_tu = dsigma_tu * abs(self.p_f / self.p_i) * ME**2
         return dsigma_tu
@@ -121,7 +126,7 @@ class CrossSection:
             json.dump(library, f)
         return None
 
-    def calc_xsection(self, N: int=40000):
+    def calc_xsection(self, N: int = 40000):
         self.integrate_xsec(N)
         with open("library.json", "r") as f:
             library = json.load(f)

@@ -10,6 +10,7 @@ class GENEvents:
     """
     internal class for generating events
     """
+
     def __init__(self, Nevent: int):
         self.delta = pymcabc.constants.delta
         self.Nevent = Nevent
