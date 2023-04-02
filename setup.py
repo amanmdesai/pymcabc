@@ -5,7 +5,7 @@ with open('README.md','r') as file:
 
 setuptools.setup(
 name="pymcabc",
-version="0.1.0",
+version="0.2.0",
 description= "Monte Carlo Event Generator for the ABC theory",
 author="Aman Desai",
 author_email="amanmukeshdesai@gmail.com",
