@@ -1,4 +1,4 @@
-#import pandas as pd
+# import pandas as pd
 import uproot
 import json
 import numpy as np
@@ -17,7 +17,14 @@ class SaveEvent:
         boolDetector (bool): optional.  gaussian smearing on particles
         boolTruth (bool): optional.  save truth events
     """
-    def __init__(self, Nevent: int, boolDecay: bool=True, boolDetector: bool=True,boolTruth: bool=True):
+
+    def __init__(
+        self,
+        Nevent: int,
+        boolDecay: bool = True,
+        boolDetector: bool = True,
+        boolTruth: bool = True,
+    ):
         """
          saving events
         Parameters:
@@ -37,12 +44,21 @@ class SaveEvent:
         self.output_1 = input_string[2]
         self.output_2 = input_string[3]
         self.decay_process = library["decay_process"]
-        if self.decay_process[0] !="NaN":
+        if self.decay_process[0] != "NaN":
             decay_split = self.decay_process[0].replace(" > ", " ")
             decay_split = decay_split.split(" ")
             self.decayed1 = decay_split[1]
             self.decayed2 = decay_split[2]
-        self.p1_e,self.p1_px,self.p1_py,self.p1_pz,self.p2_e,self.p2_px,self.p2_py,self.p2_pz= GENEvents(self.Nevent).gen_events()
+        (
+            self.p1_e,
+            self.p1_px,
+            self.p1_py,
+            self.p1_pz,
+            self.p2_e,
+            self.p2_px,
+            self.p2_py,
+            self.p2_pz,
+        ) = GENEvents(self.Nevent).gen_events()
         self.top1 = Particle(self.p1_e, self.p1_px, self.p1_py, self.p1_pz)
         self.top2 = Particle(self.p2_e, self.p2_px, self.p2_py, self.p2_pz)
 
@@ -50,14 +66,14 @@ class SaveEvent:
         self.boolDetector = boolDetector
         self.boolTruth = boolTruth
 
-    def to_root(self,name: str="ABC_events.root"):
-        """ function to save event as ROOT file
+    def to_root(self, name: str = "ABC_events.root"):
+        """function to save event as ROOT file
         Parameters:
             name (str): name of root file
 
         """
-        if self.boolTruth==True :
-            file = uproot.recreate("truth_"+name)
+        if self.boolTruth == True:
+            file = uproot.recreate("truth_" + name)
             file["events"] = {
                 self.output_1 + "_E": self.top1.E,
                 self.output_1 + "_Px": self.top1.px,
@@ -69,12 +85,10 @@ class SaveEvent:
                 self.output_2 + "_Pz": self.top2.pz,
             }
 
-
-
-        if self.boolDecay==False or self.decay_process == "NaN":
-            if self.boolDetector==True:
-                    self.top1 = Detector().gauss_smear(self.top1)
-                    self.top2 = Detector().gauss_smear(self.top2)
+        if self.boolDecay == False or self.decay_process == "NaN":
+            if self.boolDetector == True:
+                self.top1 = Detector().gauss_smear(self.top1)
+                self.top2 = Detector().gauss_smear(self.top2)
 
             file = uproot.recreate(name)
             file["events"] = {
@@ -94,12 +108,12 @@ class SaveEvent:
             decay1, decay2 = DecayParticle().prepare_decay(top1)
             decay3, decay4 = DecayParticle().prepare_decay(top2)
 
-            if self.boolDetector==True:
-                #if decay1.px[0] == -9 and decay1.E[0] == -9:
+            if self.boolDetector == True:
+                # if decay1.px[0] == -9 and decay1.E[0] == -9:
                 self.top1 = Detector().gauss_smear(self.top1)
-                #if decay2.px[0] == -9 and decay2.E[0] == -9:
+                # if decay2.px[0] == -9 and decay2.E[0] == -9:
                 self.top2 = Detector().gauss_smear(self.top2)
-                #else:
+                # else:
                 decay1 = Detector().gauss_smear(decay1)
                 decay2 = Detector().gauss_smear(decay2)
                 decay3 = Detector().gauss_smear(decay3)
@@ -110,27 +124,28 @@ class SaveEvent:
                 self.output_1 + "_Px": self.top1.px,
                 self.output_1 + "_Py": self.top1.py,
                 self.output_1 + "_Pz": self.top1.pz,
-                self.output_1 + "_E_decay_"+self.decayed1: decay1.E,
-                self.output_1 + "_Px_decay_"+self.decayed1: decay1.px,
-                self.output_1 + "_Py_decay_"+self.decayed1: decay1.py,
-                self.output_1 + "_Pz_decay_"+self.decayed1: decay1.pz,
-                self.output_1 + "_E_decay_"+self.decayed2: decay2.E,
-                self.output_1 + "_Px_decay_"+self.decayed2: decay2.px,
-                self.output_1 + "_Py_decay_"+self.decayed2: decay2.py,
-                self.output_1 + "_Pz_decay_"+self.decayed2: decay2.pz,
+                self.output_1 + "_E_decay_" + self.decayed1: decay1.E,
+                self.output_1 + "_Px_decay_" + self.decayed1: decay1.px,
+                self.output_1 + "_Py_decay_" + self.decayed1: decay1.py,
+                self.output_1 + "_Pz_decay_" + self.decayed1: decay1.pz,
+                self.output_1 + "_E_decay_" + self.decayed2: decay2.E,
+                self.output_1 + "_Px_decay_" + self.decayed2: decay2.px,
+                self.output_1 + "_Py_decay_" + self.decayed2: decay2.py,
+                self.output_1 + "_Pz_decay_" + self.decayed2: decay2.pz,
                 self.output_2 + "_E": self.top2.E,
                 self.output_2 + "_Px": self.top2.px,
                 self.output_2 + "_Py": self.top2.py,
                 self.output_2 + "_Pz": self.top2.pz,
-                self.output_2 + "_E_decay_"+self.decayed1: decay3.E,
-                self.output_2 + "_Px_decay_"+self.decayed1: decay3.px,
-                self.output_2 + "_Py_decay_"+self.decayed1: decay3.py,
-                self.output_2 + "_Pz_decay_"+self.decayed1: decay3.pz,
-                self.output_2 + "_E_decay_"+self.decayed2: decay4.E,
-                self.output_2 + "_Px_decay_"+self.decayed2: decay4.px,
-                self.output_2 + "_Py_decay_"+self.decayed2: decay4.py,
-                self.output_2 + "_Pz_decay_"+self.decayed2: decay4.pz,
+                self.output_2 + "_E_decay_" + self.decayed1: decay3.E,
+                self.output_2 + "_Px_decay_" + self.decayed1: decay3.px,
+                self.output_2 + "_Py_decay_" + self.decayed1: decay3.py,
+                self.output_2 + "_Pz_decay_" + self.decayed1: decay3.pz,
+                self.output_2 + "_E_decay_" + self.decayed2: decay4.E,
+                self.output_2 + "_Px_decay_" + self.decayed2: decay4.px,
+                self.output_2 + "_Py_decay_" + self.decayed2: decay4.py,
+                self.output_2 + "_Pz_decay_" + self.decayed2: decay4.pz,
             }
+
 
 """drop support for csv file
     def to_csv(self):

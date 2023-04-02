@@ -45,7 +45,15 @@ class DefineProcess:
 
     """
 
-    def __init__(self, input_string: str, mA: float, mB: float, mC: float, Ecm: float, channel: str= 'none'):
+    def __init__(
+        self,
+        input_string: str,
+        mA: float,
+        mB: float,
+        mC: float,
+        Ecm: float,
+        channel: str = "none",
+    ):
         """
         Defines the process, masses of particles and center of mass energy
         Parameters:
@@ -120,14 +128,14 @@ class DefineProcess:
         return None
 
     def ECM(self):
-        """ center of mass energy """
+        """center of mass energy"""
         self.library["Ecm"].append(self.Ecm)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
         return None
 
     def identify_mediator(self):
-        """ identify the mediator of the process"""
+        """identify the mediator of the process"""
         process = self.library["process"][0]
         process = process.replace(" > ", " ")
         if (

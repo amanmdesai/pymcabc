@@ -1,6 +1,7 @@
 import math
 import numpy as np
 
+
 class Particle:
     """
     This class assigns four momentum to a particle
@@ -12,6 +13,7 @@ class Particle:
         pz (float): z momentum of the particle
 
     """
+
     def __init__(self, E: float, px: float, py: float, pz: float):
         """
         Assigns four momentum to a particle
@@ -56,7 +58,6 @@ class Particle:
         """returns particle's transverse momentum"""
         return np.sqrt(self.px**2 + self.py**2)
 
-
     def mass(self):
         """returns particle's mass"""
         # try:
@@ -83,18 +84,20 @@ class Particle:
         boosts a particle four momentum.
          # boost motivated from ROOT TLorentzVector class
         """
-        new = Particle(-9,-9,-9,-9)
-        new_other = Particle(-9,-9,-9,-9)
-        new_other.set4momenta(other.E, other.px/other.E,other.py/other.E,other.pz/other.E)
+        new = Particle(-9, -9, -9, -9)
+        new_other = Particle(-9, -9, -9, -9)
+        new_other.set4momenta(
+            other.E, other.px / other.E, other.py / other.E, other.pz / other.E
+        )
         beta = new_other.p()
-        gamma = 1.0 /np.sqrt(1 - beta**2)
+        gamma = 1.0 / np.sqrt(1 - beta**2)
         gamma_2 = (gamma - 1.0) / beta
 
         dotproduct = (
             self.px * new_other.px + self.py * new_other.py + self.pz * new_other.pz
         )
-        new.px =  self.px + (gamma_2 * dotproduct + gamma * self.E)*new_other.px
-        new.py =  self.py + (gamma_2 * dotproduct + gamma * self.E)*new_other.py
-        new.pz =  self.pz + (gamma_2 * dotproduct + gamma * self.E)*new_other.pz
+        new.px = self.px + (gamma_2 * dotproduct + gamma * self.E) * new_other.px
+        new.py = self.py + (gamma_2 * dotproduct + gamma * self.E) * new_other.py
+        new.pz = self.pz + (gamma_2 * dotproduct + gamma * self.E) * new_other.pz
         new.E = gamma * (self.E + dotproduct)
         return new

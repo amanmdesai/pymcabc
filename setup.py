@@ -5,7 +5,7 @@ with open('README.md','r') as file:
 
 setuptools.setup(
 name="pymcabc",
-version="0.1.0",
+version="0.2.0",
 description= "Monte Carlo Event Generator for the ABC theory",
 author="Aman Desai",
 author_email="amanmukeshdesai@gmail.com",
@@ -14,7 +14,7 @@ maintainer_email="amanmukeshdesai@gmail.com",
 url = "https://github.com/amanmdesai/pymcabc",
 long_description=long_description,
 packages=["pymcabc"],
-install_requires=["numpy","uproot","matplotlib"],
+install_requires=["numpy","uproot","matplotlib","feynman"],
 long_description_content_type="text/markdown",
 classifiers=["License :: OSI Approved :: MIT License",
              "Programming Language :: Python :: 3",
