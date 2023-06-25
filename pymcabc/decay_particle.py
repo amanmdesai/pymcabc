@@ -35,13 +35,6 @@ class DecayParticle:
         pdecay_out.pz = pdecay.pz * costh
         pdecay_out.E = pdecay.E 
         
-        """
-        pdecay.px = pdecay.px * cosPhi - pdecay.py * sinPhi
-        pdecay.py = pdecay.px * sinPhi + pdecay.py * cosPhi
-
-        pdecay.px = pdecay.px * costh - pdecay.pz * sinth
-        pdecay.pz = pdecay.px * sinth + pdecay.pz * costh
-        """
         return pdecay_out
 
     def decay(self, top: Particle):
