@@ -9,3 +9,4 @@ from pymcabc.save_events import SaveEvent
 from pymcabc.generate_event import GENEvents
 from pymcabc.plotting import PlotData
 from pymcabc.feynman_diagram import FeynmanDiagram
+from pymcabc.particle import Particle

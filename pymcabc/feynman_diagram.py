@@ -15,16 +15,27 @@ class FeynmanDiagram:
 
         process = library["process"]
         mediator = library["mediator"][0]
+        channel = library["channel"][0]
         process = process[0].replace(">", mediator)
         self.process = process.split()
-
-        for p in library["process_type"][0]:
-            if p == "s":
-                self.s_chan()
-            elif p == "t":
-                self.t_chan()
-            elif p == "u":
-                self.u_chan()
+        if channel == "none":
+            for p in library["process_type"][0]:
+                if p == "s":
+                    self.s_chan()
+                elif p == "t":
+                    self.t_chan()
+                elif p == "u":
+                    self.u_chan()
+                else:
+                    print("Possible channels: s, t, and u")
+                    return 0
+        else:
+            if channel == "s":
+                    self.s_chan()
+            if channel == "t":
+                    self.t_chan()
+            if channel == "u":
+                    self.u_chan()
             else:
                 print("Possible channels: s, t, and u")
                 return

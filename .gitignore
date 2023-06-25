@@ -132,3 +132,5 @@ dmypy.json
 notebooks/*png
 *root
 *.json
+*.png
+*.pdf

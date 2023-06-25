@@ -60,16 +60,21 @@ class Particle:
 
     def mass(self):
         """returns particle's mass"""
-        # try:
-        #    x = math.sqrt(self.E**2 - sum([self.px**2, self.py**2, self.pz**2]))
-        #    return x
-        # except:
-        #    return 0
-        x = self.E**2 - self.px**2 - self.py**2 - self.pz**2
-        if x[0] < 0:
-            x = np.zeros(self.E.size())
-        else:
-            x = np.sqrt(x)
+        try:
+            x = self.E**2 - self.px**2 - self.py**2 - self.pz**2
+            if x < 0:
+                x = 0
+            else:
+                x = math.sqrt(x)
+        except:
+            x = [0]*len(self.px)
+            for i in range(len(x)):
+                x[i] = self.E[i]**2 - self.px[i]**2 - self.py[i]**2 - self.pz[i]**2
+                print(x[i])
+                if x[i] < 0:
+                    x[i] = 0
+                else:
+                    x[i] = math.sqrt(x)
         return x
 
     def set4momenta(self, new_E, new_px, new_py, new_pz):
@@ -83,15 +88,23 @@ class Particle:
         """
         boosts a particle four momentum.
          # boost motivated from ROOT TLorentzVector class
+
+         other is used to boost
         """
-        new = Particle(-9, -9, -9, -9)
-        new_other = Particle(-9, -9, -9, -9)
+        new = Particle(0., 0., 0., 0.)
+        new_other = Particle(0., 0., 0., 0.)
+        
         new_other.set4momenta(
             other.E, other.px / other.E, other.py / other.E, other.pz / other.E
         )
-        beta = new_other.p()
-        gamma = 1.0 / np.sqrt(1 - beta**2)
-        gamma_2 = (gamma - 1.0) / beta
+        beta = new_other.p2()
+        gamma = 1.0 / math.sqrt(1.0 - beta)
+
+        if beta>0:
+            gamma_2 = (gamma - 1.0) / beta
+        else:
+            gamma_2 = 0.0
+
 
         dotproduct = (
             self.px * new_other.px + self.py * new_other.py + self.pz * new_other.pz
