@@ -84,7 +84,8 @@ class DecayParticle:
         decay1.set4momenta(E1, 0, 0, self.decay_p)
         decay2.set4momenta(E2, 0, 0, -self.decay_p)
 
-        #decay1 = self.rotate(decay1)
+        decay1 = self.rotate(decay1)
+        decay2.set4momenta(E2, -decay1.px, -decay1.py, -decay1.pz)
         #decay2 = self.rotate(decay2)
 
         return decay1, decay2

@@ -24,7 +24,8 @@ class SaveEvent:
         boolDecay: bool = True,
         boolDetector: bool = True,
         boolTruth: bool = True,
-        detector_sigma = 0.5,
+        detector_sigma = 1.,
+        detector_factor=1.,
     ):
         """
          saving events
@@ -36,6 +37,8 @@ class SaveEvent:
         """
         self.Nevent = Nevent
         self.detector_sigma  = detector_sigma
+        self.detector_factor  = detector_factor
+
         with open("library.json", "r") as f:
             library = json.load(f)
         self.w_max = library["w_max"][0]
@@ -89,8 +92,8 @@ class SaveEvent:
 
         if self.boolDecay == False or self.decay_process == "NaN":
             if self.boolDetector == True:
-                self.top1 = Detector(self.detector_sigma).gauss_smear(self.top1)
-                self.top2 = Detector(self.detector_sigma).gauss_smear(self.top2)
+                self.top1 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(self.top1)
+                self.top2 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(self.top2)
 
             file = uproot.recreate(name)
             file["events"] = {
@@ -110,15 +113,18 @@ class SaveEvent:
             decay1, decay2 = DecayParticle().prepare_decay(top1)
             decay3, decay4 = DecayParticle().prepare_decay(top2)
             if self.boolDetector == True:
+
                 if decay1.px[0] == -9 and decay1.E[0] == -9:
-                    self.top1 = Detector(self.detector_sigma).gauss_smear(self.top1)
+                    self.top1 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(self.top1)
                 if decay2.px[0] == -9 and decay2.E[0] == -9:
-                    self.top2 = Detector(self.detector_sigma).gauss_smear(self.top2)
-                else:
-                    decay1 = Detector(self.detector_sigma).gauss_smear(decay1)
-                    decay2 = Detector(self.detector_sigma).gauss_smear(decay2)
-                    decay3 = Detector(self.detector_sigma).gauss_smear(decay3)
-                    decay4 = Detector(self.detector_sigma).gauss_smear(decay4)
+                    self.top2 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(self.top2)
+                #self.top1 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(self.top1)
+                #self.top2 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(self.top2)
+
+                decay1 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(decay1)
+                decay2 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(decay2)
+                decay3 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(decay3)
+                decay4 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(decay4)
 
             file["events"] = {
                 self.output_1 + "_E": self.top1.E,
