@@ -1,7 +1,6 @@
 import math
 import random
 import json
-import numpy as np
 import pymcabc.constants
 from pymcabc.particle import Particle
 
@@ -12,7 +11,6 @@ class DecayParticle:
     """
 
     def __init__(self):
-        # self.Ecm = library["Ecm"][0]
         with open("library.json", "r") as f:
             library = json.load(f)
         self.mA = library["mA"][0]
@@ -24,13 +22,13 @@ class DecayParticle:
         self.massive = library["massive_mass"][0]
         self.delta = pymcabc.constants.delta
 
-    def rotate(self, pdecay: Particle, size: int):
+    def rotate(self, pdecay: Particle):
         """rotate particle"""
-        costh = (np.random.rand(size) * 2) - 1
-        sinth = np.sqrt(1 - costh**2)
-        phi = 2 * math.pi * np.random.rand(size)
-        sinPhi = np.sin(phi)
-        cosPhi = np.cos(phi)
+        costh = (random.random * 2) - 1
+        sinth = math.sqrt(1 - costh**2)
+        phi = 2 * math.pi * random.random()
+        sinPhi = math.sin(phi)
+        cosPhi = math.cos(phi)
 
         pdecay.px = pdecay.px * cosPhi - pdecay.py * sinPhi
         pdecay.py = pdecay.px * sinPhi + pdecay.py * cosPhi
@@ -45,7 +43,7 @@ class DecayParticle:
         self.decay_p = (
             1
             / (2 * top.mass())
-            * np.sqrt(
+            * math.sqrt(
                 (self.mA**4 + self.mB**4 + self.mC**4)
                 - 2
                 * (
@@ -60,23 +58,23 @@ class DecayParticle:
         decay2 = Particle(-9, -9, -9, -9)
         # decay2.mass() = self.decay2_mass
 
-        E1 = np.sqrt(
+        E1 = math.sqrt(
             self.decay1_mass * self.decay1_mass + self.decay_p * self.decay_p
-        ) * np.ones(top.E.shape[0])
-        E2 = np.sqrt(
+        ) 
+        E2 = math.sqrt(
             self.decay2_mass * self.decay2_mass + self.decay_p * self.decay_p
-        ) * np.ones(top.E.shape[0])
+        ) 
 
         decay1.set4momenta(E1, 0, self.decay_p, 0)
         decay2.set4momenta(E2, 0, -self.decay_p, 0)
 
-        decay1 = self.rotate(decay1, size=top.E.shape[0])
-        decay2 = self.rotate(decay2, size=top.E.shape[0])
+        decay1 = self.rotate(decay1)
+        decay2 = self.rotate(decay2)
 
         return decay1, decay2
 
     def nearlyequal(self, a, b):
-        if abs(a - b) < 0.001:
+        if abs(a - b) < 1e-3:
             return True
         else:
             return False
@@ -86,7 +84,7 @@ class DecayParticle:
             # decay_process = decay_process.replace(" < "," ")
             # decay_process = decay_process.split(" ")
             # print(top.mass()[0], self.massive)
-            if self.nearlyequal(top.mass()[0], self.massive) and top.mass()[0] > (
+            if self.nearlyequal(top.mass(), self.massive) and top.mass() > (
                 self.decay1_mass + self.decay2_mass
             ):
                 decay1, decay2 = self.decay(top)
@@ -94,7 +92,7 @@ class DecayParticle:
                 decay2 = decay2.boost(top)
                 return decay1, decay2
             else:
-                output = np.ones(top.E.size) * (-9)
+                output = -9
                 decay1 = Particle(output, output, output, output)
                 decay2 = Particle(output, output, output, output)
                 return decay1, decay2
