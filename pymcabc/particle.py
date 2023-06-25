@@ -83,15 +83,23 @@ class Particle:
         """
         boosts a particle four momentum.
          # boost motivated from ROOT TLorentzVector class
+
+         other is used to boost
         """
-        new = Particle(-9, -9, -9, -9)
-        new_other = Particle(-9, -9, -9, -9)
+        new = Particle(0., 0., 0., 0.)
+        new_other = Particle(0., 0., 0., 0.)
+        
         new_other.set4momenta(
             other.E, other.px / other.E, other.py / other.E, other.pz / other.E
         )
-        beta = new_other.p()
-        gamma = 1.0 / np.sqrt(1 - beta**2)
-        gamma_2 = (gamma - 1.0) / beta
+        beta = new_other.p2()
+        gamma = 1.0 / math.sqrt(1.0 - beta)
+
+        if beta>0:
+            gamma_2 = (gamma - 1.0) / beta
+        else:
+            gamma_2 = 0.0
+
 
         dotproduct = (
             self.px * new_other.px + self.py * new_other.py + self.pz * new_other.pz
