@@ -16,7 +16,7 @@ class PlotData:
         label = key.replace("_", " ")
         plt.xlabel(label)
         plt.ylabel("Events")
-        plt.show()
+        #plt.show()
         plt.savefig(key + ".png")
 
     def file(filename="ABC_events.root"):

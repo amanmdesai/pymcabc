@@ -29,10 +29,11 @@ class DecayParticle:
         phi = 2 * math.pi * random.random()
         sinPhi = math.sin(phi)
         cosPhi = math.cos(phi)
-
-        pdecay.px = pdecay.pz * sinth *cosPhi
-        pdecay.py = pdecay.pz * sinth *sinPhi
-        pdecay.pz = pdecay.pz * costh
+        pdecay_out = Particle(0,0,0,0)
+        pdecay_out.px = pdecay.pz * sinth *cosPhi
+        pdecay_out.py = pdecay.pz * sinth *sinPhi
+        pdecay_out.pz = pdecay.pz * costh
+        pdecay_out.E = pdecay.E 
         
         """
         pdecay.px = pdecay.px * cosPhi - pdecay.py * sinPhi
@@ -41,7 +42,7 @@ class DecayParticle:
         pdecay.px = pdecay.px * costh - pdecay.pz * sinth
         pdecay.pz = pdecay.px * sinth + pdecay.pz * costh
         """
-        return pdecay
+        return pdecay_out
 
     def decay(self, top: Particle):
         """decay particle"""
@@ -77,14 +78,14 @@ class DecayParticle:
         ) 
         """
 
-        decay1 = Particle(-9, -9, -9, -9)
-        decay2 = Particle(-9, -9, -9, -9)
+        decay1 = Particle(0,0,0,0)
+        decay2 = Particle(0,0,0,0)
 
         decay1.set4momenta(E1, 0, 0, self.decay_p)
         decay2.set4momenta(E2, 0, 0, -self.decay_p)
 
-        decay1 = self.rotate(decay1)
-        decay2 = self.rotate(decay2)
+        #decay1 = self.rotate(decay1)
+        #decay2 = self.rotate(decay2)
 
         return decay1, decay2
 
