@@ -66,10 +66,10 @@ class Particle:
         # except:
         #    return 0
         x = self.E**2 - self.px**2 - self.py**2 - self.pz**2
-        if x[0] < 0:
-            x = np.zeros(self.E.size())
+        if x < 0:
+            x = 0
         else:
-            x = np.sqrt(x)
+            x = math.sqrt(x)
         return x
 
     def set4momenta(self, new_E, new_px, new_py, new_pz):
