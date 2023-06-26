@@ -16,8 +16,16 @@ class FeynmanDiagram:
         process = library["process"]
         mediator = library["mediator"][0]
         channel = library["channel"][0]
+
+        decay_process = library["decay_process"]
+        if decay_process !="NaN":
+            decay_process = decay_process[0].replace(">","")
+            self.decay_process = decay_process.split()
+            self.decay()
+
         process = process[0].replace(">", mediator)
         self.process = process.split()
+
         if channel == "none":
             for p in library["process_type"][0]:
                 if p == "s":
@@ -120,3 +128,23 @@ class FeynmanDiagram:
 
         diagram.plot()
         plt.savefig("uchan.pdf")
+
+    def decay(self):
+        fig = plt.figure(figsize=(10.,10.))
+        ax = fig.add_axes([0,0,1,1], frameon=False)
+
+        diagram = Diagram(ax)
+        in1 = diagram.vertex(xy=(.1,.5), marker='')
+        v1  = diagram.vertex(xy=(.5,.5))
+        out1 = diagram.vertex(xy=(.9,.75),marker='')
+        out2 = diagram.vertex(xy=(.9,.25),marker='')
+
+        a = diagram.line(in1,v1,arrow=False)
+        b = diagram.line(v1,out1,arrow=False)
+        c = diagram.line(v1,out2,arrow=False)
+        a.text(self.decay_process[0],fontsize=30,t=.1,y=.1)
+        b.text(self.decay_process[1],fontsize=30,t=-.01,y=.1)
+        c.text(self.decay_process[2],fontsize=30,t=-.1, y=-.1)
+
+        diagram.plot()
+        plt.savefig('decay.pdf')
