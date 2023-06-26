@@ -2,8 +2,15 @@ import pymcabc
 import os
 
 
-def test_xsec():
-    pymcabc.DefineProcess("A A > B B", mA=4, mB=10, mC=1, Ecm=30)
+def test_xsec_tu():
+    pymcabc.DefineProcess("A A > B B", mA=4, mB=10, mC=1, pi=30)
     sigma, error = pymcabc.CrossSection().calc_xsection()
-    assert sigma >= 10e-14, "Sigma under estimated"
-    assert sigma <= 10e-12, "Sigma over estimated"
+    assert sigma < 4e-14, "Sigma over estimated"
+    assert sigma > 1e-14, "Sigma over estimated"
+
+
+def test_xsec_st():
+    pymcabc.DefineProcess("A B > A B", mA=4, mB=10, mC=1, pi=30)
+    sigma, error = pymcabc.CrossSection().calc_xsection()
+    assert sigma < 4e-15, "Sigma over estimated"
+    assert sigma > 1e-15, "Sigma over estimated"

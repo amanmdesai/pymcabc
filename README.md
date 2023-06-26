@@ -33,7 +33,7 @@ import pymcabc
 
 1. Define the process, for example:
 ```python
-pymcabc.DefineProcess('A A > B B',mA=4,mB=10,mC=1,Ecm=30)
+pymcabc.DefineProcess('A A > B B',mA=4,mB=10,mC=1,pi=30)
 ```
 
 2. Calculate the total cross section of the process (in barn):

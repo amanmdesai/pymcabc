@@ -19,7 +19,7 @@ class MatrixElement:
         self.g = pymcabc.constants.g
         self.pi = pymcabc.constants.pi
         self.delta = pymcabc.constants.delta
-        self.p_i = math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
+        self.p_i = library["pi"][0] #math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
 
     def s_channel(self):
         """definition for s channel"""
@@ -74,7 +74,7 @@ class CrossSection:
         self.m4 = library["m4"][0]
         self.process = library["process_type"][0]
         self.p_f = pymcabc.constants.outgoing_p(self.Ecm, self.m3, self.m4)
-        self.p_i = math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
+        self.p_i = library["pi"][0] #math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
         self.channel = library["channel"][0]
 
     def dsigma_st(self, costh):
