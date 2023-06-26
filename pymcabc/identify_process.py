@@ -1,6 +1,7 @@
 import json
 import math
 
+
 def build_json():
     library = {
         "mA": [],
@@ -72,7 +73,7 @@ class DefineProcess:
         self.mB = mB
         self.mC = mC
         self.p_i = pi
-        if  self.mA<0 or self.mB<0 or self.mC < 0:
+        if self.mA < 0 or self.mB < 0 or self.mC < 0:
             raise Exception("Negative masses not accepted")
         if self.p_i <= 0:
             raise Exception("Negative or Zero absolute momentum not accepted")

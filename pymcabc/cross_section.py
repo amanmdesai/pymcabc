@@ -19,11 +19,11 @@ class MatrixElement:
         self.g = pymcabc.constants.g
         self.pi = pymcabc.constants.pi
         self.delta = pymcabc.constants.delta
-        self.p_i = library["pi"][0] #math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
+        self.p_i = library["pi"][0]  # math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
 
     def s_channel(self):
         """definition for s channel"""
-        #deno = self.Ecm**2 - self.mx**2
+        # deno = self.Ecm**2 - self.mx**2
         deno = (self.p_i**2 + self.m1**2) * (self.p_i**2 + self.m2**2)
         deno = math.sqrt(deno)
         deno = deno + self.m1**2 + self.m2**2
@@ -38,7 +38,11 @@ class MatrixElement:
             self.m1**2
             + self.m3**2
             - self.mx**2
-            - (2*math.sqrt(self.p_i**2 + self.m1**2) * math.sqrt(pf**2 + self.m3**2))
+            - (
+                2
+                * math.sqrt(self.p_i**2 + self.m1**2)
+                * math.sqrt(pf**2 + self.m3**2)
+            )
             + (2 * self.p_i * pf * costh)
         )
         if abs(deno) <= 0.09:
@@ -52,7 +56,11 @@ class MatrixElement:
             self.m1**2
             + self.m4**2
             - self.mx**2
-            - (2*math.sqrt(self.p_i**2 + self.m1**2) * math.sqrt(pf**2 + self.m4**2))
+            - (
+                2
+                * math.sqrt(self.p_i**2 + self.m1**2)
+                * math.sqrt(pf**2 + self.m4**2)
+            )
             - (2 * self.p_i * pf * costh)
         )
         if abs(deno) <= 0.09:
@@ -77,7 +85,7 @@ class CrossSection:
         self.m4 = library["m4"][0]
         self.process = library["process_type"][0]
         self.p_f = pymcabc.constants.outgoing_p(self.Ecm, self.m3, self.m4)
-        self.p_i = library["pi"][0] #math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
+        self.p_i = library["pi"][0]  # math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
         self.channel = library["channel"][0]
 
     def dsigma_st(self, costh):
@@ -140,8 +148,8 @@ class CrossSection:
         w_sum = library["w_sum"][0]
         w_square = library["w_square"][0]
         w_max = library["w_max"][0]
-        sigma_x = w_sum * pymcabc.constants.convert  / (N * 1e12) # result in barn unit
-        variance = math.sqrt(abs( (w_square / N) - (w_sum / N) ** 2))  # barn unit
+        sigma_x = w_sum * pymcabc.constants.convert / (N * 1e12)  # result in barn unit
+        variance = math.sqrt(abs((w_square / N) - (w_sum / N) ** 2))  # barn unit
         error = (
             variance * pymcabc.constants.convert / (math.sqrt(N) * 1e12)
         )  # barn unit
