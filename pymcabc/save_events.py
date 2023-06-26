@@ -48,6 +48,10 @@ class SaveEvent:
         input_string = input_string.split(" ")
         self.output_1 = input_string[2]
         self.output_2 = input_string[3]
+        if self.output_1 == self.output_2:
+            self.output_1 = self.output_1 + "_1"
+            self.output_2 = self.output_2 + "_2"
+
         self.decay_process = library["decay_process"]
         if self.decay_process[0] != "NaN":
             decay_split = self.decay_process[0].replace(" > ", " ")
@@ -117,14 +121,14 @@ class SaveEvent:
             decay1, decay2 = DecayParticle().prepare_decay(top1)
             decay3, decay4 = DecayParticle().prepare_decay(top2)
             if self.boolDetector == True:
-                if decay1.px[0] == -9 and decay1.E[0] == -9:
-                    self.top1 = Detector(
-                        self.detector_sigma, self.detector_factor
-                    ).gauss_smear(self.top1)
-                if decay2.px[0] == -9 and decay2.E[0] == -9:
-                    self.top2 = Detector(
-                        self.detector_sigma, self.detector_factor
-                    ).gauss_smear(self.top2)
+                #if decay1.px[0] == -9 and decay1.E[0] == -9:
+                self.top1 = Detector(
+                    self.detector_sigma, self.detector_factor
+                ).gauss_smear(self.top1)
+                #if decay2.px[0] == -9 and decay2.E[0] == -9:
+                self.top2 = Detector(
+                    self.detector_sigma, self.detector_factor
+                ).gauss_smear(self.top2)
                 # self.top1 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(self.top1)
                 # self.top2 = Detector(self.detector_sigma,self.detector_factor).gauss_smear(self.top2)
 
@@ -140,6 +144,7 @@ class SaveEvent:
                 decay4 = Detector(
                     self.detector_sigma, self.detector_factor
                 ).gauss_smear(decay4)
+
 
             file["events"] = {
                 self.output_1 + "_E": self.top1.E,

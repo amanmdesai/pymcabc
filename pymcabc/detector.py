@@ -26,6 +26,7 @@ class Detector:
             output_pz = [0] * len(particle.px)
             output_E = [0] * len(particle.px)
             for i in range(len(particle.px)):
+                """
                 momentum = math.sqrt(
                     particle.px[i] ** 2 + particle.py[i] ** 2 + particle.pz[i] ** 2
                 )
@@ -39,18 +40,16 @@ class Detector:
                 output_px[i] = random_measure_momentum * particle.px[i]
                 output_py[i] = random_measure_momentum * particle.py[i]
                 output_pz[i] = random_measure_momentum * particle.pz[i]
-
                 output_E[i] = random_measure_energy * particle.E[i]
-
-                """output_px[i] = random.gauss(particle.px[i], self.sigma)
-                output_py[i] = random.gauss(particle.py[i], self.sigma)
-                output_pz[i] = random.gauss(particle.pz[i], self.sigma)
-                output_E[i] = random.gauss(particle.E[i], self.sigma)
-
-                mass = output_E[i] ** 2 - (
-                    output_px[i] ** 2 + output_py[i] ** 2 + output_pz[i] ** 2
-                )
                 """
+
+                output_px[i] = random.gauss(particle.px[i], self.factor*self.sigma)
+                output_py[i] = random.gauss(particle.py[i], self.factor*self.sigma)
+                output_pz[i] = random.gauss(particle.pz[i], self.factor*self.sigma)
+                output_E[i] = random.gauss(particle.E[i], self.sigma)
                 
             particle_output = Particle(output_E, output_px, output_py, output_pz)
         return particle_output
+
+#mass = output_E[i] ** 2 - (output_px[i] ** 2 + output_py[i] ** 2 + output_pz[i] ** 2)
+
