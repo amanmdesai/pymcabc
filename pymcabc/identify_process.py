@@ -41,8 +41,6 @@ class DefineProcess:
         mC (float): mass of particle C
         Ecm (float): center of mass energy
         channel (str): optional, use to study effect a particular channel
-
-
     """
 
     def __init__(
@@ -63,8 +61,6 @@ class DefineProcess:
             mC (float): mass of particle C
             Ecm (float): center of mass energy
             channel (str): optional, use to study effect a particular channel
-
-
         """
 
         build_json()
@@ -111,7 +107,12 @@ class DefineProcess:
         channel = self.library["channel"][0]
         if channel != "none":
             if channel not in process_type:
-                raise Exception("Channel " +channel + " not available for process type "+process_type)
+                raise Exception(
+                    "Channel "
+                    + channel
+                    + " not available for process type "
+                    + process_type
+                )
         return None
 
     def masses(self):

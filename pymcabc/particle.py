@@ -67,9 +67,11 @@ class Particle:
             else:
                 x = math.sqrt(x)
         except:
-            x = [0]*len(self.px)
+            x = [0] * len(self.px)
             for i in range(len(x)):
-                x[i] = self.E[i]**2 - self.px[i]**2 - self.py[i]**2 - self.pz[i]**2
+                x[i] = (
+                    self.E[i] ** 2 - self.px[i] ** 2 - self.py[i] ** 2 - self.pz[i] ** 2
+                )
                 print(x[i])
                 if x[i] < 0:
                     x[i] = 0
@@ -91,20 +93,19 @@ class Particle:
 
          other is used to boost
         """
-        new = Particle(0., 0., 0., 0.)
-        new_other = Particle(0., 0., 0., 0.)
-        
+        new = Particle(0.0, 0.0, 0.0, 0.0)
+        new_other = Particle(0.0, 0.0, 0.0, 0.0)
+
         new_other.set4momenta(
             other.E, other.px / other.E, other.py / other.E, other.pz / other.E
         )
         beta = new_other.p2()
         gamma = 1.0 / math.sqrt(1.0 - beta)
 
-        if beta>0:
+        if beta > 0:
             gamma_2 = (gamma - 1.0) / beta
         else:
             gamma_2 = 0.0
-
 
         dotproduct = (
             self.px * new_other.px + self.py * new_other.py + self.pz * new_other.pz

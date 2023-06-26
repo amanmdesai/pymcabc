@@ -29,7 +29,6 @@ class MatrixElement:
         else:
             return (self.g**2) / deno
 
-
     def t_channel(self, costh, pf):
         """definition for t channel"""
         deno = (
