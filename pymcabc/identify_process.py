@@ -80,6 +80,7 @@ class DefineProcess:
         self.library["mC"].append(mC)
         self.library["channel"].append(channel)
         self.process()
+        self.channel()
         self.masses()
         self.ECM()
         self.identify_mediator()
@@ -103,6 +104,13 @@ class DefineProcess:
         self.library["process_type"].append(process_type)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
+        return None
+
+    def channel(self):
+        process_type = self.library["process_type"][0]
+        channel = self.library["channel"][0]
+        if channel not in process_type:
+            raise Exception("Channel " +channel + " not available for process type "+process_type)
         return None
 
     def masses(self):
