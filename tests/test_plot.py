@@ -4,7 +4,7 @@ import os
 
 # test if the file is prepared
 def test_plot_st():
-    pymcabc.DefineProcess("A A > B B", mA=4, mB=10, mC=1, pi=30)
+    pymcabc.DefineProcess("A B > A B", mA=4, mB=10, mC=1, pi=30)
     pymcabc.CrossSection().calc_xsection()
     pymcabc.SaveEvent(100, boolDecay=True, boolDetector=True).to_root(
         "test_eventGen_detector_decay_st.root"
