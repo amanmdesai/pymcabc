@@ -74,8 +74,8 @@ class DefineProcess:
         self.p_i = pi
         if  self.mA<0 or self.mB<0 or self.mC < 0:
             raise Exception("Negative masses not accepted")
-        if self.p_i < 0:
-            raise Exception("Negative absolute momentum not accepted")
+        if self.p_i <= 0:
+            raise Exception("Negative or Zero absolute momentum not accepted")
         self.library["mA"].append(mA)
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)
@@ -149,7 +149,6 @@ class DefineProcess:
             library = json.load(f)
         m1 = library["m1"][0]
         m2 = library["m2"][0]
-
         E1 = math.sqrt(m1**2 + self.p_i**2)
         E2 = math.sqrt(m2**2 + self.p_i**2)
         Ecm = E1 + E2
