@@ -23,7 +23,11 @@ class MatrixElement:
 
     def s_channel(self):
         """definition for s channel"""
-        return (self.g**2) / (self.Ecm**2 - self.mx**2)
+        deno = self.Ecm**2 - self.mx**2
+        if abs(deno) <= 0.01:
+            return (self.g**2) / (deno + 100)
+        else:
+            return (self.g**2) / deno
 
     def t_channel(self, costh, pf):
         """definition for t channel"""
@@ -134,7 +138,7 @@ class CrossSection:
         w_square = library["w_square"][0]
         w_max = library["w_max"][0]
         sigma_x = w_sum * pymcabc.constants.convert / (N * 1e12)
-        variance = math.sqrt(w_square / N - (w_sum / N) ** 2)  # barn unit
+        variance = math.sqrt(abs(w_square / N - (w_sum / N) ** 2))  # barn unit
         error = (
             variance * pymcabc.constants.convert / (math.sqrt(N) * 1e12)
         )  # barn unit

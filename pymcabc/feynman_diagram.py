@@ -31,11 +31,11 @@ class FeynmanDiagram:
                     return 0
         else:
             if channel == "s":
-                    self.s_chan()
+                self.s_chan()
             if channel == "t":
-                    self.t_chan()
+                self.t_chan()
             if channel == "u":
-                    self.u_chan()
+                self.u_chan()
             else:
                 print("Possible channels: s, t, and u")
                 return

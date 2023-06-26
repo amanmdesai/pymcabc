@@ -41,8 +41,6 @@ class DefineProcess:
         mC (float): mass of particle C
         Ecm (float): center of mass energy
         channel (str): optional, use to study effect a particular channel
-
-
     """
 
     def __init__(
@@ -63,8 +61,6 @@ class DefineProcess:
             mC (float): mass of particle C
             Ecm (float): center of mass energy
             channel (str): optional, use to study effect a particular channel
-
-
         """
 
         build_json()
@@ -75,11 +71,16 @@ class DefineProcess:
         self.mB = mB
         self.mC = mC
         self.Ecm = Ecm
+        if  self.mA<0 or self.mB<0 or self.mC < 0:
+            raise Exception("Negative masses not accepted")
+        if self.Ecm < 0:
+            raise Exception("Negative center of mass energy not accepted")
         self.library["mA"].append(mA)
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)
         self.library["channel"].append(channel)
         self.process()
+        self.channel()
         self.masses()
         self.ECM()
         self.identify_mediator()
@@ -103,6 +104,19 @@ class DefineProcess:
         self.library["process_type"].append(process_type)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
+        return None
+
+    def channel(self):
+        process_type = self.library["process_type"][0]
+        channel = self.library["channel"][0]
+        if channel != "none":
+            if channel not in process_type:
+                raise Exception(
+                    "Channel "
+                    + channel
+                    + " not available for process type "
+                    + process_type
+                )
         return None
 
     def masses(self):
@@ -202,5 +216,4 @@ class DefineProcess:
             self.library["decay_process"].append("NaN")
         with open("library.json", "w") as f:
             json.dump(self.library, f)
-
         return None
