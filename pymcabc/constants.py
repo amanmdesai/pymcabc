@@ -9,7 +9,7 @@ g = 1.0
 
 
 def outgoing_p(Ecm, m3, m4):
-    p = (Ecm**2 + m3**2 - m4**2) / (2 * Ecm)
-    p = p**2
-    p = p - m3**2
+    E = (Ecm**2 + m3**2 - m4**2) / (2 * Ecm)
+    E2 = E**2
+    p = E2 - m3**2
     return math.sqrt(p)

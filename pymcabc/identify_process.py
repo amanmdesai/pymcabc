@@ -1,4 +1,5 @@
 import json
+import math
 
 
 def build_json():
@@ -17,6 +18,7 @@ def build_json():
         "decay1_mass": [],
         "decay2_mass": [],
         "mediator": [],
+        "pi": [],
         "Ecm": [],
         "process": [],
         "process_type": [],
@@ -49,7 +51,7 @@ class DefineProcess:
         mA: float,
         mB: float,
         mC: float,
-        Ecm: float,
+        pi: float,
         channel: str = "none",
     ):
         """
@@ -70,14 +72,15 @@ class DefineProcess:
         self.mA = mA
         self.mB = mB
         self.mC = mC
-        self.Ecm = Ecm
-        if  self.mA<0 or self.mB<0 or self.mC < 0:
+        self.p_i = pi
+        if self.mA < 0 or self.mB < 0 or self.mC < 0:
             raise Exception("Negative masses not accepted")
-        if self.Ecm < 0:
-            raise Exception("Negative center of mass energy not accepted")
+        if self.p_i <= 0:
+            raise Exception("Negative or Zero absolute momentum not accepted")
         self.library["mA"].append(mA)
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)
+        self.library["pi"].append(self.p_i)
         self.library["channel"].append(channel)
         self.process()
         self.channel()
@@ -143,10 +146,17 @@ class DefineProcess:
 
     def ECM(self):
         """center of mass energy"""
-        self.library["Ecm"].append(self.Ecm)
+        with open("library.json", "r") as f:
+            library = json.load(f)
+        m1 = library["m1"][0]
+        m2 = library["m2"][0]
+        E1 = math.sqrt(m1**2 + self.p_i**2)
+        E2 = math.sqrt(m2**2 + self.p_i**2)
+        Ecm = E1 + E2
+        self.library["Ecm"].append(Ecm)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
-        return None
+        return Ecm
 
     def identify_mediator(self):
         """identify the mediator of the process"""

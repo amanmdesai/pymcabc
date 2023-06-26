@@ -46,10 +46,11 @@ class Detector:
                 output_py[i] = random.gauss(particle.py[i], self.sigma)
                 output_pz[i] = random.gauss(particle.pz[i], self.sigma)
                 output_E[i] = random.gauss(particle.E[i], self.sigma)
-                """
+
                 mass = output_E[i] ** 2 - (
                     output_px[i] ** 2 + output_py[i] ** 2 + output_pz[i] ** 2
                 )
-                print(mass)
+                """
+                
             particle_output = Particle(output_E, output_px, output_py, output_pz)
         return particle_output
