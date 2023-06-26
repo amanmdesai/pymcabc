@@ -1,7 +1,7 @@
 import pymcabc
 import os
 import json
-
+import pytest
 
 def test_identify_tu():
     pymcabc.DefineProcess("A A > B B", mA=4, mB=10, mC=1, Ecm=30)
@@ -27,6 +27,14 @@ def test_identify_st():
     assert library["mx"][0] == 1
     assert library["Ecm"][0] == 30
     library["process_type"][0] == "st"
+
+def test_negative_param():
+    with pytest.raises(Exception, match="Negative masses not accepted"):
+        pymcabc.DefineProcess("A B > A B", mA=4, mB=-10, mC=1, Ecm=30)
+
+    with pytest.raises(Exception, match="Negative center of mass energy not accepted"):
+        pymcabc.DefineProcess("A B > A B", mA=4, mB=10, mC=1, Ecm=-30)
+
 
 
 """

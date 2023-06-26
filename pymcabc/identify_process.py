@@ -71,6 +71,10 @@ class DefineProcess:
         self.mB = mB
         self.mC = mC
         self.Ecm = Ecm
+        if  self.mA<0 or self.mB<0 or self.mC < 0:
+            raise Exception("Negative masses not accepted")
+        if self.Ecm < 0:
+            raise Exception("Negative center of mass energy not accepted")
         self.library["mA"].append(mA)
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)
@@ -212,5 +216,4 @@ class DefineProcess:
             self.library["decay_process"].append("NaN")
         with open("library.json", "w") as f:
             json.dump(self.library, f)
-
         return None
