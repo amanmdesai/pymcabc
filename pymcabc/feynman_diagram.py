@@ -35,18 +35,16 @@ class FeynmanDiagram:
                 elif p == "u":
                     self.u_chan()
                 else:
-                    print("Possible channels: s, t, and u")
                     return 0
+        elif channel =="s":
+            self.s_chan()
+        elif channel == "t":
+            self.t_chan()
+        elif channel == "u":
+            self.u_chan()
         else:
-            if channel == "s":
-                self.s_chan()
-            if channel == "t":
-                self.t_chan()
-            if channel == "u":
-                self.u_chan()
-            else:
-                print("Possible channels: s, t, and u")
-                return
+            print("Possible channels: s, t, and u")
+            return 0
 
     def s_chan(self):
         fig = plt.figure(figsize=(5.0, 5.0))

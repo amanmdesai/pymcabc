@@ -24,9 +24,9 @@ class MatrixElement:
     def s_channel(self):
         """definition for s channel"""
         # deno = self.Ecm**2 - self.mx**2
-        deno = (self.p_i**2 + self.m1**2) * (self.p_i**2 + self.m2**2)
-        deno = math.sqrt(deno)
-        deno = deno + self.m1**2 + self.m2**2
+        deno = math.sqrt(self.p_i**2 + self.m1**2) + math.sqrt(self.p_i**2 + self.m2**2)
+        deno = deno**2 - self.mx**2
+        #deno = deno + self.m1**2 + self.m2**2 
         if abs(deno) <= 0.09:
             return (self.g**2) / (deno + 100)
         else:

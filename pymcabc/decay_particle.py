@@ -45,7 +45,7 @@ class DecayParticle:
         )
 
         E2 = top.mass() - E1
-
+        """
         self.decay_p = math.sqrt(
             (top.mass() ** 2 - (self.decay1_mass + self.decay2_mass) ** 2)
             * (top.mass() ** 2 - (self.decay1_mass - self.decay2_mass) ** 2)
@@ -65,7 +65,8 @@ class DecayParticle:
                 )
             )
         )
-
+        
+        """
         # decay2.mass() = self.decay2_mass
 
         E1 = math.sqrt(
