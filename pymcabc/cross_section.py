@@ -15,13 +15,13 @@ class MatrixElement:
         self.m3 = library["m3"][0]
         self.m4 = library["m4"][0]
         self.mx = library["mx"][0]
-        self.E1 = library["E1"][0]
-        self.E2 = library["E2"][0]
-        self.Ecm = self.E1 + self.E2
+        self.Ecm = library["Ecm"][0]#self.E1 + self.E2
+        #self.E1 = library["E1"][0]
+        #self.E2 = library["E2"][0]
         self.g = pymcabc.constants.g
         self.p_f = library["outgoing_p"][0]
         self.bw = library["bw"][0]
-        self.p_i = math.sqrt(self.E1**2 - self.m1**2)  # math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
+        self.p_i = library["pi"][0]  # math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
 
     def s_channel(self):
         #deno = math.sqrt(self.p_i**2 + self.m1**2) + math.sqrt(self.p_i**2 + self.m2**2)
@@ -69,9 +69,9 @@ class CrossSection:
     def __init__(self):
         with open("library.json", "r") as f:
             library = json.load(f)
-        self.E1 = library["E1"][0]
-        self.E2 = library["E2"][0]
-        self.Ecm = self.E1 + self.E2
+        #self.E1 = library["E1"][0]
+        #self.E2 = library["E2"][0]
+        self.Ecm = library["Ecm"][0]#self.E1 + self.E2
         self.m1 = library["m1"][0]
         self.m2 = library["m2"][0]
         self.m3 = library["m3"][0]
@@ -79,12 +79,12 @@ class CrossSection:
         self.process = library["process_type"][0]
         self.p_f = library["outgoing_p"][0]
         #self.p_f = pymcabc.constants.outgoing_p(self.Ecm, self.m3, self.m4)
-        #self.p_i = library["pi"][0]  # math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
+        self.p_i = library["pi"][0]  # math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
         self.channel = library["channel"][0]
-        self.p1 = math.sqrt(self.E1**2 - self.m1**2) 
-        self.p2 = math.sqrt(self.E2**2 - self.m2**2) 
-        self.phase_factor = math.sqrt( (self.E1*self.E2 + self.p1*self.p2)**2 - (self.m1*self.m2)**2)
-
+        #self.p1 = math.sqrt(self.E1**2 - self.m1**2) 
+        #self.p2 = math.sqrt(self.E2**2 - self.m2**2) 
+        #self.phase_factor = math.sqrt( (self.E1*self.E2 + self.p1*self.p2)**2 - (self.m1*self.m2)**2)
+        
     def dsigma_st(self, costh):
         if self.channel == "s":
             ME = MatrixElement().s_channel()
@@ -93,8 +93,8 @@ class CrossSection:
         else:
             ME = MatrixElement().s_channel() + MatrixElement().t_channel(costh, self.p_f)
         ME = abs(ME)
-        dsigma_st = 1 / (self.Ecm*(8  * math.pi) ** 2)
-        dsigma_st = dsigma_st * abs(self.p_f / self.phase_factor) * ME**2
+        dsigma_st = 1 / ((self.Ecm*8  * math.pi) ** 2)
+        dsigma_st = dsigma_st * abs(self.p_f / self.p_i) * ME**2
         return dsigma_st
 
     def dsigma_tu(self, costh):
@@ -105,8 +105,8 @@ class CrossSection:
         else:
             ME = MatrixElement().t_channel(costh, self.p_f) + MatrixElement().u_channel(costh, self.p_f)
         ME = abs(ME)
-        dsigma_tu = 0.5 / (self.Ecm*( 8 * math.pi) ** 2)
-        dsigma_tu = dsigma_tu * abs(self.p_f / self.phase_factor) * ME**2
+        dsigma_tu = 0.5 / ((self.Ecm* 8 * math.pi) ** 2)
+        dsigma_tu = dsigma_tu * abs(self.p_f / self.p_i) * ME**2
         return dsigma_tu
 
     def xsection(self, w_max):

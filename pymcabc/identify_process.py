@@ -21,8 +21,8 @@ def build_json():
         "decay1_mass": [],
         "decay2_mass": [],
         "mediator": [],
-        "E1": [],
-        "E2": [],
+        "pi": [],
+        "Ecm": [],
         "process": [],
         "process_type": [],
         "channel": [],
@@ -55,8 +55,9 @@ class DefineProcess:
         mA: float,
         mB: float,
         mC: float,
-        E1: float,
-        E2: float,
+        pi: float,
+        #E1: float,
+        #E2: float,
         channel: str = "none",
     ):
 
@@ -67,25 +68,27 @@ class DefineProcess:
         self.mA = mA
         self.mB = mB
         self.mC = mC
-        self.E1 = E1
-        self.E2 = E2
+        self.p_i = pi
+        #self.E1 = E1
+        #self.E2 = E2
         if self.mA < 0 or self.mB < 0 or self.mC < 0:
             raise Exception("Negative masses not accepted")
-        if self.E1 < 0:
-            raise Exception("Negative Energy not accepted")
-        if self.E2 < 0:
-            raise Exception("Negative Energy not accepted")
+        #if self.E1 < 0:
+        #    raise Exception("Negative Energy not accepted")
+        if self.p_i <= 0:
+            raise Exception("Negative or Zero momentum not accepted")
         self.library["mA"].append(mA)
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)
-        self.library["E1"].append(self.E1)
-        self.library["E2"].append(self.E2)
+        self.library["pi"].append(pi)
+        #self.library["E2"].append(self.E2)
         self.library["channel"].append(channel)
         self.process()
         self.channel()
         self.masses()
         self.identify_mediator()
         self.identify_decay()
+        self.ECM()
         self.final_momenta()
         self.bw()
 
@@ -143,7 +146,7 @@ class DefineProcess:
         with open("library.json", "w") as f:
             json.dump(self.library, f)
         return None
-    """
+    
     def ECM(self):
         #center of mass energy
         with open("library.json", "r") as f:
@@ -157,8 +160,16 @@ class DefineProcess:
             self.library["Ecm"].append(Ecm)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
-        return Ecm
-    """
+        print(
+              "\n",
+            "Energy Beam 1 : ", E1,
+              "\n",
+            "Energy Beam 2 : ", E2,
+              "\n",
+            "Energy CM : ", Ecm,
+              )
+        return E1, E2, Ecm
+    
 
     def identify_mediator(self):
         """identify the mediator of the process"""
@@ -195,7 +206,7 @@ class DefineProcess:
         return None
     
     def final_momenta(self):
-        p_f = pymcabc.constants.outgoing_p(self.E1+self.E2, self.library["m3"][0], self.library["m4"][0])
+        p_f = pymcabc.constants.outgoing_p(self.library["Ecm"][0], self.library["m3"][0], self.library["m4"][0])
         self.library["outgoing_p"].append(p_f)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
