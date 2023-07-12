@@ -42,7 +42,7 @@ class SaveEvent:
         with open("library.json", "r") as f:
             library = json.load(f)
         self.w_max = library["w_max"][0]
-        self.Ecm = library["Ecm"][0]
+        self.Ecm = library["Ecm"][0] 
         input_string = library["process"][0]
         input_string = input_string.replace(" > ", " ")
         input_string = input_string.split(" ")

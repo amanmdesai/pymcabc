@@ -34,9 +34,9 @@ def test_negative_param():
     with pytest.raises(Exception, match="Negative masses not accepted"):
         pymcabc.DefineProcess("A B > A B", mA=4, mB=-10, mC=1, pi=30)
 
+def test_negative_param_2():
     with pytest.raises(
-        Exception, match="Negative or Zero absolute momentum not accepted"
-    ):
+        Exception, match="Negative or Zero absolute momentum not accepted"):
         pymcabc.DefineProcess("A B > A B", mA=4, mB=10, mC=1, pi=-30)
 
 
