@@ -76,7 +76,7 @@ class DefineProcess:
         #if self.E1 < 0:
         #    raise Exception("Negative Energy not accepted")
         if self.p_i <= 0:
-            raise Exception("Negative or Zero momentum not accepted")
+            raise Exception("Negative or Zero absolute momentum not accepted")
         self.library["mA"].append(mA)
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)

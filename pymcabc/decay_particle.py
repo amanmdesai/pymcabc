@@ -20,7 +20,7 @@ class DecayParticle:
         self.decay1_mass = library["decay1_mass"][0]
         self.decay2_mass = library["decay2_mass"][0]
         self.massive = library["massive_mass"][0]
-        self.delta = pymcabc.constants.delta
+        self.delta = 2
 
     def rotate(self, pdecay: Particle):
         """rotate particle"""

@@ -2,7 +2,6 @@ import math
 import random
 import json
 import numpy as np
-import pymcabc.constants
 from pymcabc.cross_section import CrossSection
 
 
@@ -12,12 +11,12 @@ class GENEvents:
     """
 
     def __init__(self, Nevent: int):
-        self.delta = pymcabc.constants.delta
+        self.delta = 2
         self.Nevent = Nevent
         with open("library.json", "r") as f:
             library = json.load(f)
         self.w_max = library["w_max"][0]
-        self.Ecm = library["ECM"][0] #+ library["E2"][0]
+        self.Ecm = library["Ecm"][0] #+ library["E2"][0]
         self.m3 = library["m3"][0]
         self.m4 = library["m4"][0]
         self.process = library["process_type"][0]
@@ -36,12 +35,12 @@ class GENEvents:
         p2_pz = np.zeros(self.Nevent)
         p2_e = np.zeros(self.Nevent)
         while i < self.Nevent:
-            costh = -1 + (random.random() * self.delta)
+            costh = -1 + (random.random() * 2)
             phi = 2 * math.pi * random.random()  # * self.delta
             if self.process == "st":
-                w_ii = CrossSection().dsigma_st(costh) * self.delta
+                w_ii = CrossSection().dsigma_st(costh) *  2 * 2 * math.pi 
             elif self.process == "tu":
-                w_ii = CrossSection().dsigma_tu(costh) * self.delta
+                w_ii = CrossSection().dsigma_tu(costh) *  2 * 2 * math.pi 
             prob = w_ii / self.w_max
             random_point = random.random()
             if random_point < prob:
