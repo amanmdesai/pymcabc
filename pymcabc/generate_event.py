@@ -21,7 +21,7 @@ class GENEvents:
         self.m3 = library["m3"][0]
         self.m4 = library["m4"][0]
         self.process = library["process_type"][0]
-        self.out_p = pymcabc.constants.outgoing_p(self.Ecm, self.m3, self.m4)
+        self.out_p = library["outgoing_p"][0]
 
     def gen_events(self):
         i = 0

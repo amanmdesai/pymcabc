@@ -1,5 +1,6 @@
 import json
 import math
+import pymcabc.constants
 
 
 def build_json():
@@ -12,6 +13,7 @@ def build_json():
         "m3": [],
         "m4": [],
         "mx": [],
+        "outgoing_p": [],
         "massive": [],
         "massive_mass": [],
         "decay_process": [],
@@ -88,6 +90,7 @@ class DefineProcess:
         self.ECM()
         self.identify_mediator()
         self.identify_decay()
+        self.final_momenta()
 
     def process(self):
         """identify the physics process"""
@@ -191,6 +194,12 @@ class DefineProcess:
         with open("library.json", "w") as f:
             json.dump(self.library, f)
         return None
+    
+    def final_momenta(self):
+        p_f = pymcabc.constants.outgoing_p(self.library["Ecm"][0], self.library["m3"][0], self.library["m4"][0])
+        self.library["outgoing_p"].append(p_f)
+        with open("library.json", "w") as f:
+            json.dump(self.library, f)
 
     def identify_decay(self):
         """identify the decay chain associated with the process"""

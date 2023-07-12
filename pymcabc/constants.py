@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import math
 
-pi = math.pi
 delta = 2.0  # delta theta (radian)
 convert = 3.894e8  # GeV^-2 to pb
 g = 1.0
