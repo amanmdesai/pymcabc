@@ -17,7 +17,7 @@ class GENEvents:
         with open("library.json", "r") as f:
             library = json.load(f)
         self.w_max = library["w_max"][0]
-        self.Ecm = library["Ecm"][0]
+        self.Ecm = library["E1"][0] + library["E2"][0]
         self.m3 = library["m3"][0]
         self.m4 = library["m4"][0]
         self.process = library["process_type"][0]

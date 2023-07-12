@@ -14,14 +14,15 @@ def build_json():
         "m4": [],
         "mx": [],
         "outgoing_p": [],
+        "bw": [],
         "massive": [],
         "massive_mass": [],
         "decay_process": [],
         "decay1_mass": [],
         "decay2_mass": [],
         "mediator": [],
-        "pi": [],
-        "Ecm": [],
+        "E1": [],
+        "E2": [],
         "process": [],
         "process_type": [],
         "channel": [],
@@ -43,7 +44,8 @@ class DefineProcess:
         mA (float): mass of particle A
         mB (float): mass of particle B
         mC (float): mass of particle C
-        Ecm (float): center of mass energy
+        E1 (float): center of mass energy for beam 1
+        E2 (float): center of mass energy for beam 2
         channel (str): optional, use to study effect a particular channel
     """
 
@@ -53,19 +55,10 @@ class DefineProcess:
         mA: float,
         mB: float,
         mC: float,
-        pi: float,
+        E1: float,
+        E2: float,
         channel: str = "none",
     ):
-        """
-        Defines the process, masses of particles and center of mass energy
-        Parameters:
-            input_string (str): Physics process. Example > 'A A > B B'
-            mA (float): mass of particle A
-            mB (float): mass of particle B
-            mC (float): mass of particle C
-            Ecm (float): center of mass energy
-            channel (str): optional, use to study effect a particular channel
-        """
 
         build_json()
         with open("library.json", "r") as f:
@@ -74,23 +67,27 @@ class DefineProcess:
         self.mA = mA
         self.mB = mB
         self.mC = mC
-        self.p_i = pi
+        self.E1 = E1
+        self.E2 = E2
         if self.mA < 0 or self.mB < 0 or self.mC < 0:
             raise Exception("Negative masses not accepted")
-        if self.p_i <= 0:
-            raise Exception("Negative or Zero absolute momentum not accepted")
+        if self.E1 < 0:
+            raise Exception("Negative Energy not accepted")
+        if self.E2 < 0:
+            raise Exception("Negative Energy not accepted")
         self.library["mA"].append(mA)
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)
-        self.library["pi"].append(self.p_i)
+        self.library["E1"].append(self.E1)
+        self.library["E2"].append(self.E2)
         self.library["channel"].append(channel)
         self.process()
         self.channel()
         self.masses()
-        self.ECM()
         self.identify_mediator()
         self.identify_decay()
         self.final_momenta()
+        self.bw()
 
     def process(self):
         """identify the physics process"""
@@ -146,9 +143,9 @@ class DefineProcess:
         with open("library.json", "w") as f:
             json.dump(self.library, f)
         return None
-
+    """
     def ECM(self):
-        """center of mass energy"""
+        #center of mass energy
         with open("library.json", "r") as f:
             library = json.load(f)
         m1 = library["m1"][0]
@@ -156,10 +153,12 @@ class DefineProcess:
         E1 = math.sqrt(m1**2 + self.p_i**2)
         E2 = math.sqrt(m2**2 + self.p_i**2)
         Ecm = E1 + E2
-        self.library["Ecm"].append(Ecm)
+        if len(self.library["Ecm"]) == 0:
+            self.library["Ecm"].append(Ecm)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
         return Ecm
+    """
 
     def identify_mediator(self):
         """identify the mediator of the process"""
@@ -196,8 +195,14 @@ class DefineProcess:
         return None
     
     def final_momenta(self):
-        p_f = pymcabc.constants.outgoing_p(self.library["Ecm"][0], self.library["m3"][0], self.library["m4"][0])
+        p_f = pymcabc.constants.outgoing_p(self.E1+self.E2, self.library["m3"][0], self.library["m4"][0])
         self.library["outgoing_p"].append(p_f)
+        with open("library.json", "w") as f:
+            json.dump(self.library, f)
+
+    def bw(self):
+        deno  = 8*math.pi*(self.library["mx"][0])**2
+        self.library["bw"].append((pymcabc.constants.g**2*self.library["outgoing_p"][0])/deno)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
 
