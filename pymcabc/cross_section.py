@@ -22,7 +22,7 @@ class MatrixElement:
         self.p_i = library["pi"][0]  # math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
 
     def bw(self):
-        deno  = 8*math.pi*self.mx**2
+        deno  = 8*math.pi*(self.mx)**2
         return (self.g**2*self.p_f)/deno
 
     def s_channel(self):
@@ -156,7 +156,7 @@ class CrossSection:
             json.dump(library, f)
         return None
 
-    def calc_xsection(self, N: int = 40000):
+    def calc_xsection(self, N: int = 10000):
         self.integrate_xsec(N)
         with open("library.json", "r") as f:
             library = json.load(f)
