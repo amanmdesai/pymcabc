@@ -230,6 +230,7 @@ class DefineProcess:
         self.library["bw"].append(_bw)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
+        return _bw
 
     def identify_decay(self):
         """identify the decay chain associated with the process"""
