@@ -88,7 +88,7 @@ class DefineProcess:
         self.masses()
         self.identify_mediator()
         self.identify_decay()
-        self.ECM()
+        self._ECM()
         self.final_momenta()
         self.bw()
 
@@ -147,7 +147,7 @@ class DefineProcess:
             json.dump(self.library, f)
         return None
     
-    def ECM(self):
+    def _ECM(self):
         #center of mass energy
         with open("library.json", "r") as f:
             library = json.load(f)
@@ -156,10 +156,19 @@ class DefineProcess:
         E1 = math.sqrt(m1**2 + self.p_i**2)
         E2 = math.sqrt(m2**2 + self.p_i**2)
         Ecm = E1 + E2
-        if len(self.library["Ecm"]) == 0:
-            self.library["Ecm"].append(Ecm)
+        self.library["Ecm"].append(Ecm)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
+        return E1, E2, Ecm
+    
+    def ECM(self):
+        with open("library.json", "r") as f:
+            library = json.load(f)
+        m1 = library["m1"][0]
+        m2 = library["m2"][0]
+        E1 = math.sqrt(m1**2 + self.p_i**2)
+        E2 = math.sqrt(m2**2 + self.p_i**2)
+        Ecm = E1 + E2
         print(
               "\n",
             "Energy Beam 1 : ", E1,
@@ -169,7 +178,8 @@ class DefineProcess:
             "Energy CM : ", Ecm,
               )
         return E1, E2, Ecm
-    
+
+
 
     def identify_mediator(self):
         """identify the mediator of the process"""
@@ -212,8 +222,12 @@ class DefineProcess:
             json.dump(self.library, f)
 
     def bw(self):
-        deno  = 8*math.pi*(self.library["mx"][0])**2
-        self.library["bw"].append((pymcabc.constants.g**2*self.library["outgoing_p"][0])/deno)
+        if self.library["mx"][0] > 0:
+            deno  = 8*math.pi*(self.library["mx"][0])**2
+            _bw = (pymcabc.constants.g**2*self.library["outgoing_p"][0])/deno
+        else:
+            _bw = 0.0
+        self.library["bw"].append(_bw)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
 
