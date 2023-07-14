@@ -13,6 +13,7 @@ def build_json():
         "m3": [],
         "m4": [],
         "mx": [],
+        "_lambda": [],
         "outgoing_p": [],
         "bw": [],
         "massive": [],
@@ -90,6 +91,7 @@ class DefineProcess:
         self.identify_decay()
         self._ECM()
         self.final_momenta()
+        self._lambda_store()
         self.bw()
 
     def process(self):
@@ -221,10 +223,16 @@ class DefineProcess:
         with open("library.json", "w") as f:
             json.dump(self.library, f)
 
+    def _lambda_store(self):
+        p_f = pymcabc.constants.f_lambda(self.library["mA"][0], self.library["mB"][0], self.library["mC"][0], self.library["mx"][0])
+        self.library["_lambda"].append(p_f)
+        with open("library.json", "w") as f:
+            json.dump(self.library, f)
+
     def bw(self):
         if self.library["mx"][0] > 0:
             deno  = 8*math.pi*(self.library["mx"][0])**2
-            _bw = (pymcabc.constants.g**2*self.library["outgoing_p"][0])/deno
+            _bw = (pymcabc.constants.g**2*self.library["_lambda"][0])/deno
         else:
             _bw = 0.0
         self.library["bw"].append(_bw)
