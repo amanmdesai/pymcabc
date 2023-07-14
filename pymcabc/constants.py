@@ -12,5 +12,6 @@ def outgoing_p(Ecm, m3, m4):
     return E
 
 def f_lambda(mA, mB, mC, mX):
+    print(mA, mB, mC, mX)
     p = mA**4 + mB**4 + mC**4 - 2*(mA**2)*(mB**2) - 2*(mA**2)*(mC**2) - 2*(mB**2)*(mC**2)
-    return math.sqrt(p/(2*mX))
+    return math.sqrt(p)/(2*mX)

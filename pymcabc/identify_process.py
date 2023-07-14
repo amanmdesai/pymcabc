@@ -224,17 +224,21 @@ class DefineProcess:
             json.dump(self.library, f)
 
     def _lambda_store(self):
+        #if self.library["mx"][0] <= self.library["m3"][0] + self.library["m4"][0]:
+        #    p_f = self.library["outgoing_p"][0]
+        #else:
         p_f = pymcabc.constants.f_lambda(self.library["mA"][0], self.library["mB"][0], self.library["mC"][0], self.library["mx"][0])
         self.library["_lambda"].append(p_f)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
+        return p_f
 
     def bw(self):
-        if self.library["mx"][0] > 0:
+        if self.library["mx"][0] == min(self.mA, self.mB, self.mC) or self.library["mx"][0]==0:
+            _bw = 0.0
+        else:
             deno  = 8*math.pi*(self.library["mx"][0])**2
             _bw = (pymcabc.constants.g**2*self.library["_lambda"][0])/deno
-        else:
-            _bw = 0.0
         self.library["bw"].append(_bw)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
