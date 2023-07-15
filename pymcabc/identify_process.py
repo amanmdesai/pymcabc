@@ -219,7 +219,10 @@ class DefineProcess:
         return None
     
     def _lambda_store(self):
-        p_f = pymcabc.constants.f_lambda(self.library["mA"][0], self.library["mB"][0], self.library["mC"][0], self.library["mx"][0])
+        if self.library["mx"][0] > 0:
+            p_f = pymcabc.constants.f_lambda(self.library["mA"][0], self.library["mB"][0], self.library["mC"][0], self.library["mx"][0])
+        else:
+            p_f = 0
         self.library["_lambda"].append(p_f)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
