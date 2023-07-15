@@ -21,7 +21,7 @@ class GENEvents:
         self.m4 = library["m4"][0]
         self.process = library["process_type"][0]
         self.out_p = library["outgoing_p"][0]
-        self.seed = self.library["seed"][0]
+        self.seed = library["seed"][0]
 
     def gen_events(self):
         i = 0
