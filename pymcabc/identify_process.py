@@ -30,6 +30,7 @@ def build_json():
         "w_max": [],
         "w_sum": [],
         "w_square": [],
+        "seed":[],
     }
     jsonString = json.dumps(library, indent=2)
 
@@ -60,6 +61,7 @@ class DefineProcess:
         #E1: float,
         #E2: float,
         channel: str = "none",
+        seed: float = 5,
     ):
 
         build_json()
@@ -84,6 +86,7 @@ class DefineProcess:
         self.library["mB"].append(mB)
         self.library["mC"].append(mC)
         self.library["pi"].append(pi)
+        self.library["seed"].append(seed)
         #self.library["E2"].append(self.E2)
         self.library["channel"].append(channel)
         self.process()

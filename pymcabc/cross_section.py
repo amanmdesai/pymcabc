@@ -80,6 +80,7 @@ class CrossSection:
         self.p_f = library["outgoing_p"][0]
         self.p_i = library["pi"][0]  
         self.channel = library["channel"][0]
+        self.seed = library["seed"][0]
         # math.sqrt((self.Ecm / 2) ** 2 - (self.m1) ** 2)
         #self.E1 = library["E1"][0]
         #self.E2 = library["E2"][0]
@@ -112,9 +113,9 @@ class CrossSection:
         dsigma_tu = 0.5 / ((self.Ecm* 8 * math.pi) ** 2)
         dsigma_tu = dsigma_tu * abs(self.p_f / self.p_i) * ME**2
         return dsigma_tu
-
-    def xsection(self, w_max):
-        costh = -1 + random.random() * 2
+    
+    """
+    def xsection(self, costh, w_max):
         if self.process == "st":
             w_i = CrossSection().dsigma_st(costh) * 2 * 2 * math.pi  
         elif self.process == "tu":
@@ -122,13 +123,22 @@ class CrossSection:
         if w_max < w_i:
             w_max = w_i
         return w_i, w_max
+    """
 
     def integrate_xsec(self, N=40000):
         w_sum = 0
         w_max = 0
         w_square = 0
+        random.seed(self.seed)
         for _i in range(N):
-            w_i, w_max = CrossSection().xsection(w_max)
+            costh = -1 + random.random() * 2
+            if self.process == "st":
+                w_i = CrossSection().dsigma_st(costh) * 2 * 2 * math.pi  
+            elif self.process == "tu":
+                w_i = CrossSection().dsigma_tu(costh) * 2 * 2 * math.pi 
+            if w_max < w_i:
+                w_max = w_i
+            #w_i, w_max = CrossSection().xsection(w_max, costh)
             w_sum += w_i
             w_square += w_i * w_i
         with open("library.json", "r") as f:
@@ -140,7 +150,7 @@ class CrossSection:
             json.dump(library, f)
         return None
 
-    def calc_xsection(self, N: int = 40000):
+    def calc_xsection(self, N: int=40000):
         self.integrate_xsec(N)
         with open("library.json", "r") as f:
             library = json.load(f)
