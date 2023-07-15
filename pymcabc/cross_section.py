@@ -87,7 +87,7 @@ class CrossSection:
         #self.p1 = math.sqrt(self.E1**2 - self.m1**2) 
         #self.p2 = math.sqrt(self.E2**2 - self.m2**2) 
         #self.phase_factor = math.sqrt( (self.E1*self.E2 + self.p1*self.p2)**2 - (self.m1*self.m2)**2)
-        #self.p_f = pymcabc.constants.outgoing_p(self.Ecm, self.m3, self.m4)
+        #self.p_f = pymcabc.constants._lambda(self.Ecm, self.m3, self.m4)
 
     def dsigma_st(self, costh):
         if self.channel == "s":

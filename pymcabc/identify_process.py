@@ -70,8 +70,10 @@ class DefineProcess:
         self.mB = mB
         self.mC = mC
         self.p_i = pi
-        #self.E1 = E1
-        #self.E2 = E2
+        self.E1 = 0
+        self.E2 = 0
+        self.Ecm = 0
+        self._width = 0
         if self.mA < 0 or self.mB < 0 or self.mC < 0:
             raise Exception("Negative masses not accepted")
         #if self.E1 < 0:
@@ -92,7 +94,7 @@ class DefineProcess:
         self._ECM()
         self.final_momenta()
         self._lambda_store()
-        self.bw()
+        self._bw()
 
     def process(self):
         """identify the physics process"""
@@ -126,6 +128,12 @@ class DefineProcess:
                     + process_type
                 )
         return None
+    
+    def final_momenta(self):
+        p_f = pymcabc.constants.outgoing_p(self.library["Ecm"][0], self.library["m3"][0], self.library["m4"][0])
+        self.library["outgoing_p"].append(p_f)
+        with open("library.json", "w") as f:
+            json.dump(self.library, f)
 
     def masses(self):
         """assign masses to m1, m2, m3, m4 and mediator"""
@@ -155,33 +163,23 @@ class DefineProcess:
             library = json.load(f)
         m1 = library["m1"][0]
         m2 = library["m2"][0]
-        E1 = math.sqrt(m1**2 + self.p_i**2)
-        E2 = math.sqrt(m2**2 + self.p_i**2)
-        Ecm = E1 + E2
-        self.library["Ecm"].append(Ecm)
+        self.E1 = math.sqrt(m1**2 + self.p_i**2)
+        self.E2 = math.sqrt(m2**2 + self.p_i**2)
+        self.Ecm = self.E1 + self.E2
+        self.library["Ecm"].append(self.Ecm)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
-        return E1, E2, Ecm
     
     def ECM(self):
-        with open("library.json", "r") as f:
-            library = json.load(f)
-        m1 = library["m1"][0]
-        m2 = library["m2"][0]
-        E1 = math.sqrt(m1**2 + self.p_i**2)
-        E2 = math.sqrt(m2**2 + self.p_i**2)
-        Ecm = E1 + E2
         print(
               "\n",
-            "Energy Beam 1 : ", E1,
+            "Energy Beam 1 : ", self.E1,
               "\n",
-            "Energy Beam 2 : ", E2,
+            "Energy Beam 2 : ", self.E2,
               "\n",
-            "Energy CM : ", Ecm,
+            "Energy CM : ", self.Ecm,
               )
-        return E1, E2, Ecm
-
-
+        return self.E1, self.E2, self.Ecm
 
     def identify_mediator(self):
         """identify the mediator of the process"""
@@ -217,32 +215,27 @@ class DefineProcess:
             json.dump(self.library, f)
         return None
     
-    def final_momenta(self):
-        p_f = pymcabc.constants.outgoing_p(self.library["Ecm"][0], self.library["m3"][0], self.library["m4"][0])
-        self.library["outgoing_p"].append(p_f)
-        with open("library.json", "w") as f:
-            json.dump(self.library, f)
-
     def _lambda_store(self):
-        #if self.library["mx"][0] <= self.library["m3"][0] + self.library["m4"][0]:
-        #    p_f = self.library["outgoing_p"][0]
-        #else:
         p_f = pymcabc.constants.f_lambda(self.library["mA"][0], self.library["mB"][0], self.library["mC"][0], self.library["mx"][0])
         self.library["_lambda"].append(p_f)
         with open("library.json", "w") as f:
             json.dump(self.library, f)
         return p_f
 
-    def bw(self):
+    def _bw(self):
         if self.library["mx"][0] == min(self.mA, self.mB, self.mC) or self.library["mx"][0]==0:
             _bw = 0.0
         else:
             deno  = 8*math.pi*(self.library["mx"][0])**2
             _bw = (pymcabc.constants.g**2*self.library["_lambda"][0])/deno
         self.library["bw"].append(_bw)
+        self._width = _bw 
         with open("library.json", "w") as f:
             json.dump(self.library, f)
         return _bw
+
+    def width(self):
+        return self._width
 
     def identify_decay(self):
         """identify the decay chain associated with the process"""
