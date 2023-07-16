@@ -1,5 +1,6 @@
 # import pandas as pd
 import uproot
+import os
 import json
 import numpy as np
 from pymcabc.generate_event import GENEvents
@@ -81,6 +82,11 @@ class SaveEvent:
             name (str): name of root file
 
         """
+
+        check_extension = os.path.splitext(name)
+        if check_extension[1] != ".root":
+            raise ValueError("Output supported with .root extension only") 
+
         if self.boolTruth == True:
             file = uproot.recreate("truth_" + name)
             file["events"] = {
