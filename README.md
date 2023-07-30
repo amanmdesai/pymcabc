@@ -23,7 +23,7 @@ pip install pymcabc
 ```
 
 ## Physics
-The physics of ABC model (theory) is described in Grifiths.
+The physics of ABC model (theory) is described in Grifiths and Aitchison.
 
 ## Simple script to start using the package:
 1. Import pymcabc:
