@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import matplotlib.pyplot as plt
 
-# import pandas as pd
+import os, pathlib
+import pandas as pd
 import uproot
 
 
@@ -19,9 +20,13 @@ class PlotData:
         plt.savefig(key + ".png")
 
     def file(filename="ABC_events.root"):
-        file = uproot.open(filename)
-        tree = file["events"]
-        branches = tree.arrays()
-        for key in tree.keys():
-            PlotData.plot(branches[key], key)
-
+        if pathlib.PurePosixPath(filename).suffix == ".root":
+            file = uproot.open(filename)
+            tree = file["events"]
+            branches = tree.arrays()
+            for key in tree.keys():
+                PlotData.plot(branches[key], key)
+        elif pathlib.PurePosixPath(filename).suffix == ".root":
+            df = pd.read_csv(filename)
+            for col in df.columns:
+                PlotData.plot(df[col], col)

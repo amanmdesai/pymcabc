@@ -134,3 +134,4 @@ notebooks/*png
 *.json
 *.png
 *.pdf
+*.csv
