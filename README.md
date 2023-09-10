@@ -6,6 +6,7 @@
 [![PyPI Package latest release](https://img.shields.io/pypi/v/pymcabc.svg)](https://pypi.python.org/pypi/pymcabc)
 [![Supported versions](https://img.shields.io/pypi/pyversions/pymcabc.svg)](https://pypi.python.org/pypi/pymcabc)
 [![DOI](https://zenodo.org/badge/587987289.svg)](https://zenodo.org/badge/latestdoi/587987289)
+[![PrePrint](https://img.shields.io/badge/Preprint-10.5281/zenodo.7546325-red.svg)](https://doi.org/10.5281/zenodo.7546325)
 
 
 ## Author
