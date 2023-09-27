@@ -128,7 +128,7 @@ class FeynmanDiagram:
         plt.savefig("uchan.pdf")
 
     def decay(self):
-        fig = plt.figure(figsize=(10.,10.))
+        fig = plt.figure(figsize=(5.,5.))
         ax = fig.add_axes([0,0,1,1], frameon=False)
 
         diagram = Diagram(ax)
