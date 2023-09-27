@@ -13,10 +13,12 @@ class PlotData:
     """
 
     def plot(data, key):
-        plt.hist(data, bins=40, color=None)
+        fig, ax = plt.subplots()
+        ax.cla()
+        ax.hist(data, bins=40, color=None)
         label = key.replace("_", " ")
-        plt.xlabel(label)
-        plt.ylabel("Events")
+        ax.set_xlabel(label)
+        ax.set_ylabel("Events")
         plt.savefig(key + ".png")
 
     def file(filename="ABC_events.root"):
